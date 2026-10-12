@@ -1,6 +1,10 @@
 name: Rebuild Carl assets
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - "assets/carl-data/**"
+      - ".github/workflows/rebuild-carl.yml"
   workflow_run:
     workflows: ["pages build and deployment"]
     types: [completed]
@@ -8,7 +12,7 @@ permissions:
   contents: write
 jobs:
   rebuild:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
