@@ -1,0 +1,28 @@
+name: Rebuild Carl assets
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rebuild images
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat assets/carl-data/left-*.b64 | tr -d '\n\r' | base64 -d > assets/carl-book1-left.avif
+          cat assets/carl-data/right-*.b64 | tr -d '\n\r' | base64 -d > assets/carl-book1-right.avif
+          file assets/carl-book1-left.avif
+          file assets/carl-book1-right.avif
+          wc -c assets/carl-book1-left.avif assets/carl-book1-right.avif
+      - name: Commit rebuilt assets
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/carl-book1-left.avif assets/carl-book1-right.avif
+          git diff --cached --quiet && exit 0
+          git commit -m "Rebuild Carl image assets from verified chunks"
+          git push
