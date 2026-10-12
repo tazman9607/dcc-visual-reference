@@ -1,0 +1,41 @@
+name: Import current DCC site
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pull known-good production build
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE="https://dcc-reference-edition-3z4tdq7j4-keeks2.vercel.app"
+          curl -fsSL "$BASE/" -o index.html
+          mkdir -p images/book1
+          for f in             brandon-andrews.webp             carl-left.webp carl-right.webp             chris-andrews.webp clurichauns.webp elle-mcgibbons.webp             goblin-murder-dozer.webp             imani-left.webp imani-right.webp             laminaks.webp             mongo-left.webp mongo-right.webp             mordecai-left.webp mordecai-right.webp             odette-left.webp odette-right.webp             prepotente.webp             princess-donut-left.webp princess-donut-right.webp             troglodytes.webp yolanda-martinez.webp
+          do
+            curl -fsSL "$BASE/images/book1/$f" -o "images/book1/$f"
+          done
+          touch .nojekyll
+
+      - name: Commit imported site
+        shell: bash
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html images/book1 .nojekyll
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          git commit -m "Import current DCC production site"
+          git push
