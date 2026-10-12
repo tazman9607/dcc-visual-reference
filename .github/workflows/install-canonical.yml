@@ -1,0 +1,49 @@
+name: Install canonical DCC build
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/install-canonical.yml
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Replace repo with chained-book build
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE="https://dcc-reference-edition-k11k24s0k-keeks2.vercel.app"
+
+          rm -rf assets images
+          curl -fsSL "$BASE/" -o index.html
+
+          mkdir -p assets images/book1
+
+          for f in             brandon-andrews-book1.webp brandon-andrews.webp             carl-book1-left.webp carl-book1-right.webp             chris-andrews-book1.webp chris-andrews.webp             clurichauns-book1.webp clurichauns.webp             elle-mcgibbons-book1.webp elle-mcgibbons.webp             goblin-murder-dozer-book1.webp goblin-murder-dozer.webp             imani-book1-left.webp imani-left.webp imani-book1-right.webp imani-right.webp             laminaks-book1.webp laminaks.webp             mongo-book1-left.webp mongo-left.webp mongo-book1-right.webp mongo-right.webp             mordecai-book1-left.webp mordecai-left.webp mordecai-book1-right.webp mordecai-right.webp             odette-book1-left.webp odette-left.webp odette-book1-right.webp odette-right.webp             prepotente-book1.webp prepotente.webp             princess-donut-book1-left.webp princess-donut-left.webp             princess-donut-book1-right.webp princess-donut-right.webp             troglodytes-book1.webp troglodytes.webp             yolanda-martinez-book1.webp yolanda-martinez.webp
+          do
+            curl -fsSL "$BASE/assets/$f" -o "assets/$f"
+          done
+
+          for f in             brandon-andrews.webp chris-andrews.webp clurichauns.webp elle-mcgibbons.webp             goblin-murder-dozer.webp imani-left.webp imani-right.webp laminaks.webp             mongo-left.webp mongo-right.webp mordecai-left.webp mordecai-right.webp             odette-left.webp odette-right.webp prepotente.webp             princess-donut-left.webp princess-donut-right.webp             troglodytes.webp yolanda-martinez.webp
+          do
+            curl -fsSL "$BASE/images/book1/$f" -o "images/book1/$f"
+          done
+
+          touch .nojekyll
+
+      - name: Commit canonical build
+        shell: bash
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Set chained-book build as canonical DCC version"
+          git push
