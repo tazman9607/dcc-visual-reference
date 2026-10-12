@@ -1,6 +1,9 @@
 name: Rebuild Carl assets
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/rebuild-carl.yml"
 permissions:
   contents: write
 jobs:
