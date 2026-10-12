@@ -1,0 +1,34 @@
+name: Import high quality Carl images
+on:
+  push:
+    paths:
+      - ".github/workflows/import-carl-hq.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Download approved HQ Carl images
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 3 -o assets/carl-book1-left.webp 'https://sdmntprwestus3.oaiusercontent.com/files/00000000-74b8-81fd-ac86-28ab51d37aeb/raw?se=2026-10-12T13%3A57%3A25Z&sp=r&sv=2026-02-06&sr=b&scid=d8151617-b9de-5ed0-9f97-5268b003dc28&skoid=0a4a0f0c-99ac-4752-9d87-cfac036fa93f&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-12T01%3A13%3A54Z&ske=2026-10-13T01%3A13%3A54Z&sks=b&skv=2026-02-06&sig=66ZTcPfQBkgYbpeyLVFmWHFtBxi58oOHGONuCwC1900%3D'
+          curl -fL --retry 3 -o assets/carl-book1-right.webp 'https://sdmntprukwest.oaiusercontent.com/files/00000000-8cbc-8243-af10-070564909d73/raw?se=2026-10-12T13%3A56%3A56Z&sp=r&sv=2026-02-06&sr=b&scid=42c7437d-f4e0-5ed0-ace5-c9ffa3b47612&skoid=0a4a0f0c-99ac-4752-9d87-cfac036fa93f&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-12T06%3A17%3A39Z&ske=2026-10-13T06%3A17%3A39Z&sks=b&skv=2026-02-06&sig=W25keKNqTmO2cvdlYfNEEKNWs17LEhL9Xbw9o86FZjU%3D'
+          echo '8ee68ecd201bc0fda718ab18f78fbfea5c12ba8734cd38ce8aa6e0ad70561ed9  assets/carl-book1-left.webp' | sha256sum -c -
+          echo '9930636886660ad2e201695909500df3e509eeb62917279d4b88eb35cb511c01  assets/carl-book1-right.webp' | sha256sum -c -
+          test "$(wc -c < assets/carl-book1-left.webp)" -eq 265282
+          test "$(wc -c < assets/carl-book1-right.webp)" -eq 259242
+          sed -i 's#./assets/carl-book1-left.avif#./assets/carl-book1-left.webp#g; s#./assets/carl-book1-right.avif#./assets/carl-book1-right.webp#g' index.html
+      - name: Commit HQ assets
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/carl-book1-left.webp assets/carl-book1-right.webp index.html
+          git commit -m "Replace Carl images with high quality originals"
+          git push
