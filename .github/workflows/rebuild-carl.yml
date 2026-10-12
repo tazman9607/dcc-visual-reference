@@ -1,16 +1,19 @@
 name: Rebuild Carl assets
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - ".github/workflows/rebuild-carl.yml"
+  workflow_run:
+    workflows: ["pages build and deployment"]
+    types: [completed]
 permissions:
   contents: write
 jobs:
   rebuild:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - name: Rebuild images
         shell: bash
         run: |
@@ -26,6 +29,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/carl-book1-left.avif assets/carl-book1-right.avif
-          git diff --cached --quiet && exit 0
+          if git diff --cached --quiet; then
+            echo "Assets already rebuilt; nothing to commit."
+            exit 0
+          fi
           git commit -m "Rebuild Carl image assets from verified chunks"
           git push
