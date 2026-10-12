@@ -70,7 +70,7 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
 
 <section id="entry" class="view"><div class="stage"><button class="back" id="entryBack">← SECTION</button>
 <div class="entryBar"><button id="masterShortcut">Master identity</button></div>
-<div id="generatedEntry" class="generatedWrap" style="display:none"><div class="generatedSpread"><img data-carl-side="left" alt="Carl Book I left page"><img data-carl-side="right" alt="Carl Book I right page"></div><div class="generatedGutter"></div></div>
+<div id="generatedEntry" class="generatedWrap" style="display:none"><div class="generatedSpread"><img src="./assets/carl-book1-left.avif" alt="Carl Book I left page"><img src="./assets/carl-book1-right.avif" alt="Carl Book I right page"></div><div class="generatedGutter"></div></div>
 <div id="placeholderEntry" class="placeholderSpread" style="display:none"></div>
 </div></section>
 
@@ -117,25 +117,14 @@ document.getElementById("masterShortcut").addEventListener("click",()=>openMaste
 document.addEventListener("input",e=>{if(e.target.id==="catalogSearch")renderCatalog("All")});
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.matches("[data-go-on-enter]"))go(e.target.dataset.goOnEnter)});
 
-async function hydrateCarlPages(){
-  const loadSide=async(side)=>{
-    let b64="";
-    for(let i=0;i<8;i++){
-      const res=await fetch('./assets/carl-data/'+side+'-'+i+'.b64?v=1');
-      if(!res.ok) throw new Error('Carl image chunk failed: '+side+' '+i);
-      b64+=(await res.text()).trim();
-    }
-    const raw=atob(b64);
-    const bytes=new Uint8Array(raw.length);
-    for(let i=0;i<raw.length;i++) bytes[i]=raw.charCodeAt(i);
-    const img=document.querySelector('[data-carl-side="'+side+'"]');
-    img.src=URL.createObjectURL(new Blob([bytes],{type:'image/avif'}));
-  };
-  await Promise.all([loadSide('left'),loadSide('right')]);
-}
-hydrateCarlPages().catch(console.error);
 
-openBook(1);go("library");
+openBook(1);
+const deepEntry=new URLSearchParams(location.search).get("entry");
+if(deepEntry&&deepEntry.toLowerCase()==="carl"){
+  currentBook=1;currentCategory="Main cast";currentName="Carl";entryOrigin="book";openEntry("I");
+}else{
+  go("library");
+}
 </script>
 </body>
 </html><script async data-explicit-opt-in="true" data-deployment-id="dpl_2jpH3uXtPReupjk6beDvKADtrGjE" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
