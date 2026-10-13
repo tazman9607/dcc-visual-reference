@@ -22,36 +22,32 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
 .modal{display:none;position:fixed;inset:0;background:#000c;z-index:100;align-items:center;justify-content:center}.modal.show{display:flex}.modalbox{width:min(400px,90%);background:#17120f;border:1px solid #493a2d;padding:22px;text-align:center}.modalbox button{width:100%;padding:10px;margin-top:8px;border:0}.yes{background:var(--red);color:white}.no{background:#25201b;color:#c9beac}
 @media(max-width:950px){.nav,.quick{display:none}.head{grid-template-columns:1fr}.folio{grid-template-columns:1fr;max-width:680px}.gutter{display:none}.library{margin-left:-16px;margin-right:-16px;border-radius:0}.generatedSpread{grid-template-columns:1fr;gap:10px}.generatedSpread img{border-radius:8px!important}.generatedGutter{display:none}.indexrow{grid-template-columns:36px 1fr}.indexmeta{display:none}}
 
-/* Mobile UI refinement: preserve the approved archive shell and artwork. */
-@media(max-width:600px){
- header{height:54px}.head{padding:0 14px}.brand{font-size:13px;letter-spacing:.09em}
- main{padding:12px 12px 88px}.identity{padding:14px 0 20px}.crawler{font-size:clamp(42px,12vw,68px)}.archive b{font-size:20px}
- .library{margin:0 -12px;padding:16px 10px 22px;overflow-x:auto;scrollbar-width:thin;scroll-snap-type:x proximity}
- .bookgrid{justify-content:start;grid-template-columns:repeat(5,116px);min-width:628px;gap:12px 8px}.bookobj{width:108px;height:205px}.cover{width:99px;height:205px}.spine{height:197px}.pages{height:190px}.lock{left:37px;top:100px}.book strong{font-size:10px;max-width:108px}.book{scroll-snap-align:start}
- .stage{padding:38px 0 20px}.back{left:8px;top:0;padding:8px 12px 11px}.folio{margin-top:12px;min-height:0;filter:drop-shadow(0 12px 16px #0007)}
- .leaf{min-width:0}.leaf.left,.leaf.right{border-radius:5px}.contentsL,.contentsR,.catpage,.masterL,.masterR,.searchL,.searchR{padding:24px 20px}
- .covermount{margin:18px auto 8px;width:55%;max-width:190px}.stamp{top:30px;right:20px}.booktitle,.catpage h1,.masterL h1,.searchL h1{font-size:clamp(36px,10vw,52px);overflow-wrap:anywhere}
- .intro,.catpage p,.masterSummary,.searchL p{font-size:14px}.toc-row{min-height:46px}.indexrow{padding:14px 0;min-height:52px}.indexname{font-size:20px}
- .generatedWrap{padding-bottom:14px}.generatedSpread{gap:8px}.entryBar{justify-content:flex-end;flex-wrap:wrap;margin-top:2px}.placeholderSpread{padding:28px 20px;min-height:280px}
- .filters{gap:8px}.filters button{min-height:36px;padding:8px 10px}.cataloginput input{font-size:18px}.card{min-height:66px}
- .idrow{grid-template-columns:110px 1fr}.versionrow{grid-template-columns:60px 1fr;gap:8px}.versionstate{display:none}
- button{touch-action:manipulation}button:focus-visible,.book:focus-visible{outline:2px solid #c58c58;outline-offset:3px}
-}
-@media(prefers-reduced-motion:no-preference){.view.active{animation:archiveReveal .18s ease-out}@keyframes archiveReveal{from{opacity:.6;transform:translateY(4px)}to{opacity:1;transform:none}}}
-
-/* Mobile navigation and true book-spread reader */
-.mobileNav{display:none}.readerControls{display:none}
+/* Stable mobile layout: no sideways shelf scrolling or stacked book leaves */
 @media(max-width:950px){
- .mobileNav{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;bottom:0;left:0;right:0;z-index:90;padding:7px 10px calc(7px + env(safe-area-inset-bottom));background:#130d09f5;border-top:1px solid #65442e;box-shadow:0 -8px 25px #0008}
- .mobileNav button{border:0;background:transparent;color:#c9b18f;min-height:44px;font-size:12px;font-weight:700;letter-spacing:.04em;border-radius:7px}.mobileNav button.active{background:#543024;color:#fff0d6}
- main{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
- .readerControls{display:flex;justify-content:center;gap:8px;margin:6px auto 12px}.readerControls button{min-height:38px;border:1px solid #76583d;border-radius:5px;background:#21160e;color:#e5d0ad;padding:7px 13px;font-size:12px}.readerControls button.active{background:#8e342d;color:white;border-color:#bc6b55}
- .generatedSpread{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2px;align-items:start}.generatedSpread img{width:100%;min-width:0;border-radius:0!important}.generatedSpread img:first-child{border-radius:5px 0 0 5px!important}.generatedSpread img:last-child{border-radius:0 5px 5px 0!important}.generatedGutter{display:block}
- .generatedWrap.readerSingle .generatedSpread{display:block;max-width:680px;margin:auto}.generatedWrap.readerSingle .generatedSpread img{display:none}.generatedWrap.readerSingle .generatedSpread img.readerVisible{display:block;border-radius:5px!important}.generatedWrap.readerSingle .generatedGutter{display:none}
- .generatedWrap.singleImage .generatedSpread{display:block}.generatedWrap.singleImage .generatedSpread img{display:block;border-radius:5px!important}
+ .nav,.quick{display:none}.head{grid-template-columns:1fr}
+ .folio{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);max-width:100%;min-height:0}
+ .folio>.leaf{min-width:0}.folio>.gutter{display:block}
+ .library{overflow:visible;margin:0;padding:12px 0 20px}
+ .bookgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:auto 12px auto;min-width:0;gap:10px 4px;width:100%}
+ .book{min-width:0}.bookobj{width:100%;height:auto;aspect-ratio:145/235}.cover{width:92%;height:100%}.spine{height:96%}.pages{height:93%}.book strong{font-size:clamp(7px,1.5vw,11px);overflow-wrap:anywhere}.book small,.book span{font-size:8px}.shelf{min-width:0}
+ .stage{padding:48px 0 12px}.back{left:4px;top:4px}.folio{margin-top:0}
+ .contentsL,.contentsR,.catpage,.masterL,.masterR,.searchL,.searchR{padding:clamp(8px,2.5vw,22px)}
+ .booktitle,.catpage h1,.masterL h1,.searchL h1{font-size:clamp(22px,5vw,48px);overflow-wrap:anywhere}
+ .toc-row{min-height:42px;grid-template-columns:24px 1fr 12px 20px}.toc-row b{font-size:clamp(10px,2.2vw,15px)}
+ .indexrow{grid-template-columns:25px 1fr;min-height:44px}.indexname{font-size:clamp(12px,2.6vw,20px)}.indexmeta{display:none}
+ .intro,.catpage p,.masterSummary,.searchL p{font-size:clamp(10px,2.1vw,14px)}
+ .generatedSpread{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px}.generatedSpread img{min-width:0;width:100%;height:auto;border-radius:0!important}.generatedGutter{display:block}
+ .generatedWrap.readerSingle .generatedSpread{display:block;max-width:680px;margin:auto}.generatedWrap.readerSingle .generatedSpread img{display:none}.generatedWrap.readerSingle .generatedSpread img.readerVisible{display:block;border-radius:6px!important}.generatedWrap.readerSingle .generatedGutter{display:none}
+ .generatedWrap.singleImage .generatedSpread{display:block}.generatedWrap.singleImage .generatedSpread img{display:block}
+ .mobileNav{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;bottom:0;left:0;right:0;z-index:90;padding:7px 10px calc(7px + env(safe-area-inset-bottom));background:#130d09f5;border-top:1px solid #65442e}
+ .mobileNav button{border:0;background:transparent;color:#c9b18f;min-height:44px;font-size:12px;font-weight:700;border-radius:7px}.mobileNav button.active{background:#543024;color:#fff0d6}
+ main{padding-bottom:calc(90px + env(safe-area-inset-bottom))}
+ .readerControls{display:flex;position:sticky;top:54px;z-index:12;justify-content:center;gap:5px;background:#100b08ed;padding:7px 4px;margin:6px auto 12px}
+ .readerControls button{min-height:38px;border:1px solid #76583d;border-radius:5px;background:#21160e;color:#e5d0ad;padding:7px 10px;font-size:12px}.readerControls button.active{background:#8e342d;color:#fff}.readerControls button:disabled{opacity:.3}
+ .entryBar{flex-wrap:wrap}.filters button{min-height:36px}.cataloginput input{width:100%}
 }
-
-@media(max-width:950px){.readerControls{position:sticky;top:58px;z-index:12;background:#100b08ed;padding:7px 4px;border-radius:6px}.readerControls button:disabled{opacity:.3;cursor:default}.generatedWrap.readerSingle .generatedSpread img.readerVisible{max-height:none;object-fit:contain}.mobileNav button:focus-visible,.readerControls button:focus-visible{outline:2px solid #e7b880;outline-offset:2px}}
+.mobileNav,.readerControls{display:none}
+@media(max-width:950px){.mobileNav{display:grid}.readerControls[style*="flex"]{display:flex}}
 </style>
 </head>
 <body>
