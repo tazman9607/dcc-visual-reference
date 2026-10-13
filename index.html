@@ -25,11 +25,11 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
 /* Stable mobile layout: no sideways shelf scrolling or stacked book leaves */
 @media(max-width:950px){
  .nav,.quick{display:none}.head{grid-template-columns:1fr}
- .folio{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);max-width:100%;min-height:0}
- .folio>.leaf{min-width:0}.folio>.gutter{display:block}
+ .folio{display:grid;grid-template-columns:minmax(0,1fr);max-width:680px;min-height:0}.folio>.leaf{grid-column:1}.folio>.leaf.left{display:none}.folio>.leaf.right{border-radius:7px}.folio>.gutter{display:none}#categoryFolio>.leaf.left{display:block}#categoryFolio>.leaf.right{display:block}#categoryFolio>.leaf{grid-column:1}#categoryFolio>.leaf.left{border-radius:7px 7px 0 0}#categoryFolio>.leaf.right{border-radius:0 0 7px 7px}
+ .folio>.leaf{min-width:0}
  .library{overflow:visible;margin:0;padding:12px 0 20px}
  .bookgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:auto 12px auto;min-width:0;gap:10px 4px;width:100%}
- .book{min-width:0}.bookobj{width:100%;height:auto;aspect-ratio:145/235}.cover{width:92%;height:100%}.spine{height:96%}.pages{height:93%}.book strong{font-size:clamp(7px,1.5vw,11px);overflow-wrap:anywhere}.book small,.book span{font-size:8px}.shelf{min-width:0}
+ .book{min-width:0}.bookobj{filter:drop-shadow(3px 5px 5px #0008)}.lock{left:50%;top:50%;transform:translate(-50%,-50%);width:22px;height:20px}.book span{letter-spacing:0}.book strong{min-height:36px}.bookobj{width:100%;height:auto;aspect-ratio:145/235}.cover{width:92%;height:100%}.spine{height:96%}.pages{height:93%}.book strong{font-size:clamp(7px,1.5vw,11px);overflow-wrap:anywhere}.book small,.book span{font-size:8px}.shelf{min-width:0}
  .stage{padding:48px 0 12px}.back{left:4px;top:4px}.folio{margin-top:0}
  .contentsL,.contentsR,.catpage,.masterL,.masterR,.searchL,.searchR{padding:clamp(8px,2.5vw,22px)}
  .booktitle,.catpage h1,.masterL h1,.searchL h1{font-size:clamp(22px,5vw,48px);overflow-wrap:anywhere}
@@ -46,7 +46,7 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
  .readerControls button{min-height:38px;border:1px solid #76583d;border-radius:5px;background:#21160e;color:#e5d0ad;padding:7px 10px;font-size:12px}.readerControls button.active{background:#8e342d;color:#fff}.readerControls button:disabled{opacity:.3}
  .entryBar{flex-wrap:wrap}.filters button{min-height:36px}.cataloginput input{width:100%}
 }
-.mobileNav,.readerControls{display:none}
+.mobileNav{display:none}.readerControls{display:none}
 @media(max-width:950px){.mobileNav{display:grid}.readerControls[style*="flex"]{display:flex}}
 </style>
 </head>
