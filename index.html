@@ -50,6 +50,8 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
  .generatedWrap.readerSingle .generatedSpread{display:block;max-width:680px;margin:auto}.generatedWrap.readerSingle .generatedSpread img{display:none}.generatedWrap.readerSingle .generatedSpread img.readerVisible{display:block;border-radius:5px!important}.generatedWrap.readerSingle .generatedGutter{display:none}
  .generatedWrap.singleImage .generatedSpread{display:block}.generatedWrap.singleImage .generatedSpread img{display:block;border-radius:5px!important}
 }
+
+@media(max-width:950px){.readerControls{position:sticky;top:58px;z-index:12;background:#100b08ed;padding:7px 4px;border-radius:6px}.readerControls button:disabled{opacity:.3;cursor:default}.generatedWrap.readerSingle .generatedSpread img.readerVisible{max-height:none;object-fit:contain}.mobileNav button:focus-visible,.readerControls button:focus-visible{outline:2px solid #e7b880;outline-offset:2px}}
 </style>
 </head>
 <body>
@@ -145,7 +147,7 @@ const BOOK1_ASSETS={
 let currentBook=1,currentCategory="Main cast",currentName="Carl",entryOrigin="book";
 const views=[...document.querySelectorAll(".view")];
 
-function go(id){views.forEach(v=>v.classList.toggle("active",v.id===id));document.querySelectorAll(".mobileNav button").forEach(b=>b.classList.toggle("active",b.dataset.go===id));window.scrollTo(0,0);if(id==="search")renderCatalog("All")}
+function go(id){views.forEach(v=>v.classList.toggle("active",v.id===id));const navId=["book","characters","entry","master"].includes(id)?"book":id;document.querySelectorAll(".mobileNav button").forEach(b=>{const active=b.dataset.go===navId;b.classList.toggle("active",active);if(active)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});window.scrollTo(0,0);if(id==="search")renderCatalog("All")}
 function openBook(n){currentBook=Number(n);const b=BOOKS[currentBook];document.getElementById("volumeKicker").textContent="VOLUME "+b.roman+" · VISUAL ARCHIVE COPY";document.getElementById("bookKicker").textContent="BOOK "+b.roman+" · ARCHIVE CONTENTS";document.getElementById("bookTitle").textContent=b.title;document.getElementById("bookCover").src=b.cover;go("book")}
 function renderCategory(name){currentCategory=name;const arr=DATA[name]||[],meta=META[name],cut=Math.ceil(arr.length/2);const make=(items,offset)=>'<div class="indexlist">'+items.map((n,i)=>'<button class="indexrow" data-book-person="'+n.replaceAll('"','&quot;')+'" data-person-category="'+name+'"><span class="indexnum">'+String(offset+i+1).padStart(2,"0")+'</span><span class="indexname">'+n+'</span><span class="indexmeta">Book '+BOOKS[currentBook].roman+' reference</span></button>').join("")+'</div>';document.getElementById("categoryFolio").innerHTML='<section class="leaf left"><div class="catpage"><div class="kicker">SECTION '+meta[0]+' · BOOK '+BOOKS[currentBook].roman+' ARCHIVE</div><h1>'+name+'</h1><div class="redrule"></div><p>'+meta[1]+'</p>'+make(arr.slice(0,cut),0)+'</div></section><section class="leaf right"><div class="catpage"><div class="kicker">SECTION '+meta[0]+' · CONTINUED</div>'+make(arr.slice(cut),cut)+'</div></section><div class="gutter"></div>';go("characters")}
 function openBookPerson(name,cat){currentName=name;currentCategory=cat;entryOrigin="book";openEntry(BOOKS[currentBook].roman)}
@@ -169,19 +171,19 @@ function openEntry(roman){
     spread.classList.remove("singleImage");
     ph.innerHTML='<div class="kicker">BOOK '+roman+' · CHARACTER STUDY</div><h1 style="font:700 52px Georgia,serif;margin:12px 0">'+currentName+' — Book '+roman+'</h1><p>This book-specific visual spread has not been generated yet.</p>';
   }
-  setReaderMode("spread");
+  setReaderMode(window.matchMedia("(max-width:950px)").matches?"single":"spread");
   document.getElementById("entryBack").textContent=entryOrigin==="master"?"← MASTER IDENTITY":"← "+currentCategory.toUpperCase();
   go("entry");
 }
 function renderCatalog(filter){const q=(document.getElementById("catalogSearch")?.value||"").toLowerCase();let rows=[];for(const [cat,names] of Object.entries(DATA)){if(filter!=="All"&&filter!==cat)continue;for(const name of names)rows.push({cat,name})}if(q)rows=rows.filter(x=>x.name.toLowerCase().includes(q)||x.cat.toLowerCase().includes(q));document.getElementById("results").innerHTML=rows.slice(0,8).map(x=>'<button class="card" data-search-person="'+x.name.replaceAll('"','&quot;')+'" data-person-category="'+x.cat+'"><small>'+x.cat+'</small><strong>'+x.name+'</strong><span>Global identity record</span></button>').join("")||'<p style="color:#6d5942;font-family:Georgia,serif">No unlocked record matches.</p>'}
 let readerMode="spread",readerPage=0;
 function setReaderMode(mode){readerMode=mode;readerPage=0;const wrap=document.getElementById("generatedEntry");wrap.classList.toggle("readerSingle",mode==="single");updateReader();}
-function updateReader(){const images=[...document.querySelectorAll("#generatedEntry .generatedSpread img")];images.forEach((img,i)=>img.classList.toggle("readerVisible",i===readerPage));document.querySelectorAll("[data-reader-mode]").forEach(b=>b.classList.toggle("active",b.dataset.readerMode===readerMode));document.querySelectorAll("[data-reader-page]").forEach(b=>b.hidden=readerMode!=="single"||images.length<2);}
+function updateReader(){const images=[...document.querySelectorAll("#generatedEntry .generatedSpread img")];images.forEach((img,i)=>img.classList.toggle("readerVisible",i===readerPage));document.querySelectorAll("[data-reader-mode]").forEach(b=>b.classList.toggle("active",b.dataset.readerMode===readerMode));document.querySelectorAll("[data-reader-page]").forEach(b=>{b.hidden=readerMode!=="single"||images.length<2;b.disabled=b.dataset.readerPage==="previous"?readerPage===0:readerPage>=images.length-1});}
 document.addEventListener("click",e=>{
   const mode=e.target.closest("[data-reader-mode]");if(mode){setReaderMode(mode.dataset.readerMode);return}
   const page=e.target.closest("[data-reader-page]");if(page){const n=document.querySelectorAll("#generatedEntry .generatedSpread img").length;readerPage=Math.max(0,Math.min(n-1,readerPage+(page.dataset.readerPage==="next"?1:-1)));updateReader();return}
   const cat=e.target.closest("[data-category]");if(cat){renderCategory(cat.dataset.category);return}
-  const g=e.target.closest("[data-go]");if(g){go(g.dataset.go);return}
+  const g=e.target.closest("[data-go]");if(g){if(g.dataset.go==="book")openBook(currentBook);else go(g.dataset.go);return}
   const b=e.target.closest("[data-book]");if(b){openBook(b.dataset.book);return}
   const bp=e.target.closest("[data-book-person]");if(bp){openBookPerson(bp.dataset.bookPerson,bp.dataset.personCategory);return}
   const sp=e.target.closest("[data-search-person]");if(sp){openMaster(sp.dataset.searchPerson,sp.dataset.personCategory);return}
