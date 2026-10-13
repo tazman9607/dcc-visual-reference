@@ -38,11 +38,24 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
  button{touch-action:manipulation}button:focus-visible,.book:focus-visible{outline:2px solid #c58c58;outline-offset:3px}
 }
 @media(prefers-reduced-motion:no-preference){.view.active{animation:archiveReveal .18s ease-out}@keyframes archiveReveal{from{opacity:.6;transform:translateY(4px)}to{opacity:1;transform:none}}}
+
+/* Mobile navigation and true book-spread reader */
+.mobileNav{display:none}.readerControls{display:none}
+@media(max-width:950px){
+ .mobileNav{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;bottom:0;left:0;right:0;z-index:90;padding:7px 10px calc(7px + env(safe-area-inset-bottom));background:#130d09f5;border-top:1px solid #65442e;box-shadow:0 -8px 25px #0008}
+ .mobileNav button{border:0;background:transparent;color:#c9b18f;min-height:44px;font-size:12px;font-weight:700;letter-spacing:.04em;border-radius:7px}.mobileNav button.active{background:#543024;color:#fff0d6}
+ main{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+ .readerControls{display:flex;justify-content:center;gap:8px;margin:6px auto 12px}.readerControls button{min-height:38px;border:1px solid #76583d;border-radius:5px;background:#21160e;color:#e5d0ad;padding:7px 13px;font-size:12px}.readerControls button.active{background:#8e342d;color:white;border-color:#bc6b55}
+ .generatedSpread{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2px;align-items:start}.generatedSpread img{width:100%;min-width:0;border-radius:0!important}.generatedSpread img:first-child{border-radius:5px 0 0 5px!important}.generatedSpread img:last-child{border-radius:0 5px 5px 0!important}.generatedGutter{display:block}
+ .generatedWrap.readerSingle .generatedSpread{display:block;max-width:680px;margin:auto}.generatedWrap.readerSingle .generatedSpread img{display:none}.generatedWrap.readerSingle .generatedSpread img.readerVisible{display:block;border-radius:5px!important}.generatedWrap.readerSingle .generatedGutter{display:none}
+ .generatedWrap.singleImage .generatedSpread{display:block}.generatedWrap.singleImage .generatedSpread img{display:block;border-radius:5px!important}
+}
 </style>
 </head>
 <body>
 <div class="app">
 <header><div class="head"><div class="brand" data-go="library">Crawler Archive</div><nav class="nav"><button data-go="library">Library</button><button data-go="search">Search</button><button data-category="Main cast">Main cast</button><button data-category="Allies">Allies</button><button data-category="NPCs">NPCs</button><button data-category="Enemies">Enemies</button><button data-category="Monsters">Monsters</button><button data-category="Bosses">Bosses</button></nav><input class="quick" placeholder="Search archive..." data-go-on-enter="search"></div></header>
+<nav class="mobileNav" aria-label="Main navigation"><button type="button" data-go="library">Library</button><button type="button" data-go="book">Contents</button><button type="button" data-go="search">Search</button></nav>
 <main>
 <section id="library" class="view active">
 <div class="identity"><div class="the">THE</div><div class="crawler">CRAWLER</div><div class="archive"><b>ARCHIVE</b></div></div>
@@ -87,6 +100,7 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
 
 <section id="entry" class="view"><div class="stage"><button class="back" id="entryBack">← SECTION</button>
 <div class="entryBar"><button id="masterShortcut">Master identity</button></div>
+<div id="readerControls" class="readerControls"><button type="button" data-reader-mode="spread">Two pages</button><button type="button" data-reader-mode="single">Single page</button><button type="button" data-reader-page="previous" aria-label="Previous page">←</button><button type="button" data-reader-page="next" aria-label="Next page">→</button></div>
 <div id="generatedEntry" class="generatedWrap" style="display:none"><div class="generatedSpread"><img src="/assets/carl-book1-left.webp" alt="Carl Book I left page"><img src="/assets/carl-book1-right.webp" alt="Carl Book I right page"></div><div class="generatedGutter"></div></div>
 <div id="placeholderEntry" class="placeholderSpread" style="display:none"></div>
 </div></section>
@@ -131,7 +145,7 @@ const BOOK1_ASSETS={
 let currentBook=1,currentCategory="Main cast",currentName="Carl",entryOrigin="book";
 const views=[...document.querySelectorAll(".view")];
 
-function go(id){views.forEach(v=>v.classList.toggle("active",v.id===id));window.scrollTo(0,0);if(id==="search")renderCatalog("All")}
+function go(id){views.forEach(v=>v.classList.toggle("active",v.id===id));document.querySelectorAll(".mobileNav button").forEach(b=>b.classList.toggle("active",b.dataset.go===id));window.scrollTo(0,0);if(id==="search")renderCatalog("All")}
 function openBook(n){currentBook=Number(n);const b=BOOKS[currentBook];document.getElementById("volumeKicker").textContent="VOLUME "+b.roman+" · VISUAL ARCHIVE COPY";document.getElementById("bookKicker").textContent="BOOK "+b.roman+" · ARCHIVE CONTENTS";document.getElementById("bookTitle").textContent=b.title;document.getElementById("bookCover").src=b.cover;go("book")}
 function renderCategory(name){currentCategory=name;const arr=DATA[name]||[],meta=META[name],cut=Math.ceil(arr.length/2);const make=(items,offset)=>'<div class="indexlist">'+items.map((n,i)=>'<button class="indexrow" data-book-person="'+n.replaceAll('"','&quot;')+'" data-person-category="'+name+'"><span class="indexnum">'+String(offset+i+1).padStart(2,"0")+'</span><span class="indexname">'+n+'</span><span class="indexmeta">Book '+BOOKS[currentBook].roman+' reference</span></button>').join("")+'</div>';document.getElementById("categoryFolio").innerHTML='<section class="leaf left"><div class="catpage"><div class="kicker">SECTION '+meta[0]+' · BOOK '+BOOKS[currentBook].roman+' ARCHIVE</div><h1>'+name+'</h1><div class="redrule"></div><p>'+meta[1]+'</p>'+make(arr.slice(0,cut),0)+'</div></section><section class="leaf right"><div class="catpage"><div class="kicker">SECTION '+meta[0]+' · CONTINUED</div>'+make(arr.slice(cut),cut)+'</div></section><div class="gutter"></div>';go("characters")}
 function openBookPerson(name,cat){currentName=name;currentCategory=cat;entryOrigin="book";openEntry(BOOKS[currentBook].roman)}
@@ -144,6 +158,7 @@ function openEntry(roman){
   const ph=document.getElementById("placeholderEntry");
   wrap.style.display=real?"block":"none";
   ph.style.display=real?"none":"block";
+  document.getElementById("readerControls").style.display=real&&assets.length>1?"flex":"none";
   if(real){
     const single=assets.length===1;
     wrap.classList.toggle("singleImage",single);
@@ -154,11 +169,17 @@ function openEntry(roman){
     spread.classList.remove("singleImage");
     ph.innerHTML='<div class="kicker">BOOK '+roman+' · CHARACTER STUDY</div><h1 style="font:700 52px Georgia,serif;margin:12px 0">'+currentName+' — Book '+roman+'</h1><p>This book-specific visual spread has not been generated yet.</p>';
   }
+  setReaderMode("spread");
   document.getElementById("entryBack").textContent=entryOrigin==="master"?"← MASTER IDENTITY":"← "+currentCategory.toUpperCase();
   go("entry");
 }
 function renderCatalog(filter){const q=(document.getElementById("catalogSearch")?.value||"").toLowerCase();let rows=[];for(const [cat,names] of Object.entries(DATA)){if(filter!=="All"&&filter!==cat)continue;for(const name of names)rows.push({cat,name})}if(q)rows=rows.filter(x=>x.name.toLowerCase().includes(q)||x.cat.toLowerCase().includes(q));document.getElementById("results").innerHTML=rows.slice(0,8).map(x=>'<button class="card" data-search-person="'+x.name.replaceAll('"','&quot;')+'" data-person-category="'+x.cat+'"><small>'+x.cat+'</small><strong>'+x.name+'</strong><span>Global identity record</span></button>').join("")||'<p style="color:#6d5942;font-family:Georgia,serif">No unlocked record matches.</p>'}
+let readerMode="spread",readerPage=0;
+function setReaderMode(mode){readerMode=mode;readerPage=0;const wrap=document.getElementById("generatedEntry");wrap.classList.toggle("readerSingle",mode==="single");updateReader();}
+function updateReader(){const images=[...document.querySelectorAll("#generatedEntry .generatedSpread img")];images.forEach((img,i)=>img.classList.toggle("readerVisible",i===readerPage));document.querySelectorAll("[data-reader-mode]").forEach(b=>b.classList.toggle("active",b.dataset.readerMode===readerMode));document.querySelectorAll("[data-reader-page]").forEach(b=>b.hidden=readerMode!=="single"||images.length<2);}
 document.addEventListener("click",e=>{
+  const mode=e.target.closest("[data-reader-mode]");if(mode){setReaderMode(mode.dataset.readerMode);return}
+  const page=e.target.closest("[data-reader-page]");if(page){const n=document.querySelectorAll("#generatedEntry .generatedSpread img").length;readerPage=Math.max(0,Math.min(n-1,readerPage+(page.dataset.readerPage==="next"?1:-1)));updateReader();return}
   const cat=e.target.closest("[data-category]");if(cat){renderCategory(cat.dataset.category);return}
   const g=e.target.closest("[data-go]");if(g){go(g.dataset.go);return}
   const b=e.target.closest("[data-book]");if(b){openBook(b.dataset.book);return}
