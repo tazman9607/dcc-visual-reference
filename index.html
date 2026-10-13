@@ -21,6 +21,23 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
 .entryBar{max-width:1240px;margin:10px auto 8px;display:flex;justify-content:flex-end;gap:8px}.entryBar button{border:1px solid #5a4331;background:#17110d;color:#cdb998;padding:7px 10px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}.generatedWrap{max-width:1240px;margin:0 auto;position:relative;padding-bottom:24px}.generatedSpread{display:grid;grid-template-columns:1fr 1fr;gap:2px;align-items:start;filter:drop-shadow(0 30px 35px #0009)}.generatedSpread img{display:block;width:100%;height:auto}.generatedSpread img:first-child{border-radius:8px 0 0 8px}.generatedSpread img:last-child{border-radius:0 8px 8px 0}.generatedSpread.singleImage{display:block;max-width:1240px;margin:0 auto}.generatedSpread.singleImage img{width:100%;border-radius:8px}.generatedWrap.singleImage .generatedGutter{display:none}.generatedGutter{position:absolute;left:50%;top:10px;bottom:34px;width:16px;transform:translateX(-50%);background:linear-gradient(90deg,transparent,#0005,#fff1,transparent);pointer-events:none}.placeholderSpread{max-width:1180px;margin:0 auto;padding:60px;color:#2b2016;background:var(--paper);border:1px solid #7c6548;border-radius:8px;font:18px Georgia,serif;min-height:600px}
 .modal{display:none;position:fixed;inset:0;background:#000c;z-index:100;align-items:center;justify-content:center}.modal.show{display:flex}.modalbox{width:min(400px,90%);background:#17120f;border:1px solid #493a2d;padding:22px;text-align:center}.modalbox button{width:100%;padding:10px;margin-top:8px;border:0}.yes{background:var(--red);color:white}.no{background:#25201b;color:#c9beac}
 @media(max-width:950px){.nav,.quick{display:none}.head{grid-template-columns:1fr}.folio{grid-template-columns:1fr;max-width:680px}.gutter{display:none}.library{margin-left:-16px;margin-right:-16px;border-radius:0}.generatedSpread{grid-template-columns:1fr;gap:10px}.generatedSpread img{border-radius:8px!important}.generatedGutter{display:none}.indexrow{grid-template-columns:36px 1fr}.indexmeta{display:none}}
+
+/* Mobile UI refinement: preserve the approved archive shell and artwork. */
+@media(max-width:600px){
+ header{height:54px}.head{padding:0 14px}.brand{font-size:13px;letter-spacing:.09em}
+ main{padding:12px 12px 88px}.identity{padding:14px 0 20px}.crawler{font-size:clamp(42px,12vw,68px)}.archive b{font-size:20px}
+ .library{margin:0 -12px;padding:16px 10px 22px;overflow-x:auto;scrollbar-width:thin;scroll-snap-type:x proximity}
+ .bookgrid{justify-content:start;grid-template-columns:repeat(5,116px);min-width:628px;gap:12px 8px}.bookobj{width:108px;height:205px}.cover{width:99px;height:205px}.spine{height:197px}.pages{height:190px}.lock{left:37px;top:100px}.book strong{font-size:10px;max-width:108px}.book{scroll-snap-align:start}
+ .stage{padding:38px 0 20px}.back{left:8px;top:0;padding:8px 12px 11px}.folio{margin-top:12px;min-height:0;filter:drop-shadow(0 12px 16px #0007)}
+ .leaf{min-width:0}.leaf.left,.leaf.right{border-radius:5px}.contentsL,.contentsR,.catpage,.masterL,.masterR,.searchL,.searchR{padding:24px 20px}
+ .covermount{margin:18px auto 8px;width:55%;max-width:190px}.stamp{top:30px;right:20px}.booktitle,.catpage h1,.masterL h1,.searchL h1{font-size:clamp(36px,10vw,52px);overflow-wrap:anywhere}
+ .intro,.catpage p,.masterSummary,.searchL p{font-size:14px}.toc-row{min-height:46px}.indexrow{padding:14px 0;min-height:52px}.indexname{font-size:20px}
+ .generatedWrap{padding-bottom:14px}.generatedSpread{gap:8px}.entryBar{justify-content:flex-end;flex-wrap:wrap;margin-top:2px}.placeholderSpread{padding:28px 20px;min-height:280px}
+ .filters{gap:8px}.filters button{min-height:36px;padding:8px 10px}.cataloginput input{font-size:18px}.card{min-height:66px}
+ .idrow{grid-template-columns:110px 1fr}.versionrow{grid-template-columns:60px 1fr;gap:8px}.versionstate{display:none}
+ button{touch-action:manipulation}button:focus-visible,.book:focus-visible{outline:2px solid #c58c58;outline-offset:3px}
+}
+@media(prefers-reduced-motion:no-preference){.view.active{animation:archiveReveal .18s ease-out}@keyframes archiveReveal{from{opacity:.6;transform:translateY(4px)}to{opacity:1;transform:none}}}
 </style>
 </head>
 <body>
@@ -75,7 +92,7 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
 </div></section>
 
 <section id="search" class="view"><div class="stage"><button class="back" data-go="library">← LIBRARY</button><div class="folio">
-<section class="leaf left"><div class="searchL"><div class="kicker">ARCHIVE CATALOGUE · UNLOCKED MATERIAL</div><h1>Who the fuck<br>was that?</h1><p>Search globally when you are not already browsing a specific book.</p><div class="cataloginput"><input id="catalogSearch" value="Odette" placeholder="Name, alias, creature..."></div><div class="filters"><button data-filter="All">All</button><button data-filter="Main cast">Main cast</button><button data-filter="Allies">Allies</button><button data-filter="NPCs">NPCs</button><button data-filter="Enemies">Enemies</button><button data-filter="Monsters">Monsters</button><button data-filter="Bosses">Bosses</button></div></div></section>
+<section class="leaf left"><div class="searchL"><div class="kicker">ARCHIVE CATALOGUE · UNLOCKED MATERIAL</div><h1>Who the fuck<br>was that?</h1><p>Search globally when you are not already browsing a specific book.</p><div class="cataloginput"><input id="catalogSearch" placeholder="Name, alias, creature..."></div><div class="filters"><button data-filter="All">All</button><button data-filter="Main cast">Main cast</button><button data-filter="Allies">Allies</button><button data-filter="NPCs">NPCs</button><button data-filter="Enemies">Enemies</button><button data-filter="Monsters">Monsters</button><button data-filter="Bosses">Bosses</button></div></div></section>
 <section class="leaf right"><div class="searchR"><div class="kicker" style="margin-bottom:12px">MATCHING RECORDS</div><div id="results" class="results"></div></div></section><div class="gutter"></div>
 </div></div></section>
 </main>
