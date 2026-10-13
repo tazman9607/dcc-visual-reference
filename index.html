@@ -2,198 +2,109 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>The Crawler Archive</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#120f0d">
+<title>DCC Visual Reference</title>
 <style>
-:root{--paper:#ead9b7;--paper2:#dfcaa4;--ink:#281e15;--muted:#80694e;--red:#8e342d;--line:#826b4f55}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,#21150d 0,#0b0806 38%,#070504 100%);color:#eee2cf;font-family:Inter,system-ui,sans-serif}
-button,input{font:inherit}.view{display:none}.view.active{display:block}[hidden]{display:none!important}
-header{height:58px;position:sticky;top:0;z-index:50;background:#0b0806f5;border-bottom:1px solid #37261a}.head{height:100%;max-width:1450px;margin:auto;padding:0 16px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}.brand{font:900 12px Arial Black,Impact,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#e8d0aa;cursor:pointer}.nav{display:flex;justify-content:center;gap:2px;align-self:end}.nav button{height:31px;border:0;background:#1a120e;color:#918477;padding:0 9px;border-radius:4px 4px 0 0;cursor:pointer;font-size:9px}.nav button:hover{background:var(--paper);color:var(--ink)}.quick{width:210px;background:#17110d;border:1px solid #443126;color:#eee2cf;border-radius:5px;padding:7px 9px}
-main{max-width:1450px;margin:auto;padding:18px 16px 80px}
-.identity{text-align:center;padding:7px 0 16px}.the{font:900 10px Arial Black,Impact,sans-serif;letter-spacing:.5em;color:#aa8b64}.crawler{font:900 clamp(50px,7vw,84px)/.77 Arial Black,Impact,sans-serif;letter-spacing:-.05em;text-transform:uppercase;color:#eed6aa;-webkit-text-stroke:1px #765532}.archive{display:inline-block;margin-top:6px;background:#963a32;border:1px solid #ca7768;padding:6px 20px;transform:skewX(-8deg);box-shadow:6px 6px 0 #2c1b13}.archive b{display:block;transform:skewX(8deg);font:900 clamp(20px,3vw,31px) Arial Black,Impact,sans-serif;letter-spacing:.2em}
-.library{border:1px solid #3d2b1e;border-radius:13px;background:linear-gradient(#281a10,#140d09);padding:20px 15px 27px;overflow-x:auto;box-shadow:0 28px 75px #0008}.bookgrid{display:grid;grid-template-columns:repeat(5,145px);grid-template-rows:auto 24px auto;gap:15px 12px;justify-content:center;min-width:790px}.book{text-align:center;cursor:pointer}.bookobj{height:235px;width:125px;margin:0 auto 8px;position:relative;filter:drop-shadow(12px 14px 16px #0008)}.cover{position:absolute;left:9px;width:116px;height:235px;border-radius:3px 7px 7px 3px;overflow:hidden;background:#2b2119;border:1px solid #ffffff20}.cover img{width:100%;height:100%;object-fit:cover}.spine{position:absolute;left:0;top:4px;width:14px;height:227px;background:linear-gradient(90deg,#432719,#21140d)}.pages{position:absolute;right:-4px;top:8px;width:7px;height:219px;background:repeating-linear-gradient(0deg,#e3d5b4 0 2px,#c7b58f 2px 3px)}.book small{display:block;font-size:8px;letter-spacing:.17em;color:#8f7c67}.book strong{display:block;min-height:27px;max-width:140px;margin:4px auto 2px;font:700 10.5px/1.14 Georgia,serif;color:#dcc8a8}.book span{font-size:8px;letter-spacing:.13em;text-transform:uppercase}.unlocked span{color:#8da97e}.locked span{color:#756a5f}.locked .cover img{filter:grayscale(.85) brightness(.32)}.sealed{position:absolute;inset:0;display:grid;place-items:center;color:#a78c65;font:900 12px Arial Black,Impact,sans-serif;letter-spacing:.16em}.locked .bookobj:before,.locked .bookobj:after{content:"";position:absolute;z-index:5;inset:0}.locked .bookobj:before{background:linear-gradient(33deg,transparent 44%,#9d875f 45% 47%,#2b241c 48% 50%,#9d875f 51% 53%,transparent 54%)}.locked .bookobj:after{background:linear-gradient(-31deg,transparent 44%,#927d58 45% 47%,#2a231c 48% 50%,#927d58 51% 53%,transparent 54%)}.lock{position:absolute;z-index:7;left:48px;top:116px;width:43px;height:36px;background:#80683f;border:2px solid #2e2418;border-radius:6px}.shelf{grid-column:1/-1;height:24px;background:repeating-linear-gradient(90deg,#55311d 0 60px,#603a23 60px 120px,#482818 120px 180px);border-top:2px solid #7a4d2e}
-.stage{position:relative;padding:16px 14px 31px}.back{position:absolute;left:28px;top:0;z-index:8;border:0;background:var(--red);color:#f2dfc0;padding:9px 13px 12px;clip-path:polygon(0 0,100% 0,100% 82%,50% 100%,0 82%);font:700 10px Georgia,serif;cursor:pointer}
-.folio{position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:680px;max-width:1180px;margin:12px auto 0;filter:drop-shadow(0 30px 30px #0008)}.folio.single{grid-template-columns:1fr;max-width:590px}.folio.single .leaf{border-radius:8px}.folio.single .gutter{display:none}.leaf{position:relative;color:var(--ink);overflow:hidden;background:repeating-linear-gradient(0deg,transparent 0 30px,#5b432a0b 31px),linear-gradient(100deg,var(--paper),var(--paper2));border:1px solid #7c6548}.leaf.left{border-radius:8px 0 0 8px}.leaf.right{border-radius:0 8px 8px 0;background:repeating-linear-gradient(0deg,transparent 0 30px,#5b432a0b 31px),linear-gradient(80deg,var(--paper2),var(--paper))}.gutter{position:absolute;left:50%;top:10px;bottom:10px;width:14px;transform:translateX(-50%);z-index:4;background:linear-gradient(90deg,transparent,#0003,#fff1,transparent);pointer-events:none}
-.contentsL,.contentsR,.catpage,.masterL,.masterR,.searchL,.searchR{padding:40px;position:relative;height:100%}.kicker{font:700 9px Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#7b6548}.covermount{width:72%;max-width:330px;aspect-ratio:2/3;margin:55px auto 0;background:#c6af87;padding:8px;transform:rotate(-1deg);box-shadow:8px 12px 18px #4a321c33}.covermount img{width:100%;height:100%;object-fit:cover}.stamp{position:absolute;right:30px;top:48px;border:3px solid #8b352b70;color:#8b352b88;padding:7px 10px;font:900 12px Arial Black,Impact,sans-serif;transform:rotate(8deg)}.booktitle{font:700 58px/.92 Georgia,serif;margin:12px 0}.redrule{height:4px;width:90px;background:var(--red);margin:18px 0}.intro{font:14px/1.55 Georgia,serif;color:#604d3a}.toc-row{width:100%;display:grid;grid-template-columns:34px auto 1fr auto;gap:8px;align-items:baseline;border:0;background:transparent;color:var(--ink);padding:10px 0;border-bottom:1px solid #4e3a262f;text-align:left;cursor:pointer}.toc-row b{font:700 17px Georgia,serif}.toc-row i{border-bottom:1px dotted #513c2770}.toc-row span,.toc-row em{font:700 10px Arial,sans-serif;color:#8a6f50;font-style:normal}
-.catpage h1{font:700 58px/.9 Georgia,serif;margin:14px 0}.catpage p{font:14px/1.5 Georgia,serif;color:#624f3b}.indexlist{margin-top:24px;border-top:2px solid #5b4632}.indexrow{width:100%;display:grid;grid-template-columns:42px 1fr auto;gap:14px;align-items:center;padding:17px 0;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);text-align:left;cursor:pointer}.indexrow:hover .indexname{text-decoration:underline;text-underline-offset:4px}.indexnum{font:700 10px Arial,sans-serif;color:#8a6d4c;letter-spacing:.1em}.indexname{font:700 23px Georgia,serif}.indexmeta{font:9px Arial,sans-serif;color:#81694d;text-transform:uppercase;letter-spacing:.08em}
-.masterL h1{font:700 66px/.9 Georgia,serif;margin:16px 0 22px}.masterSummary{font:18px/1.55 Georgia,serif;color:#554432;max-width:460px}.masterMeta{margin-top:36px;border-top:2px solid #5f4933}.idrow{display:grid;grid-template-columns:140px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid #513d282f}.idrow b{font:700 9px Arial,sans-serif;text-transform:uppercase;color:#83694a}.idrow span{font:14px Georgia,serif}.versionHeading{font:700 30px Georgia,serif;margin:12px 0 5px}.versionIntro{font:14px/1.5 Georgia,serif;color:#5e4b38;margin-bottom:20px}.versionlist{border-top:2px solid #5f4933}.versionrow{width:100%;display:grid;grid-template-columns:70px 1fr auto;align-items:center;gap:14px;padding:18px 0;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);text-align:left;cursor:pointer}.versionrow:hover .versionname{text-decoration:underline;text-underline-offset:4px}.versionbook{font:900 11px Arial Black,Impact,sans-serif;letter-spacing:.13em;color:#886a48}.versionname{font:700 20px Georgia,serif}.versionstate{font:9px Arial,sans-serif;color:#81694d;text-transform:uppercase;letter-spacing:.08em}.versionrow.locked{opacity:.45;cursor:default}
-.searchL h1{font:700 60px/.92 Georgia,serif;margin:10px 0}.searchL p{font:14px/1.5 Georgia,serif;color:#624f3b}.cataloginput{margin-top:28px}.cataloginput input{width:100%;border:0;border-bottom:2px solid #604a34;background:transparent;color:var(--ink);padding:12px 0;font:700 20px Georgia,serif;outline:none}.filters{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}.filters button{border:1px solid #8b7457;background:transparent;color:#584633;padding:5px 8px;font:700 9px Arial,sans-serif;cursor:pointer}.results{display:flex;flex-direction:column;gap:11px}.card{border:1px solid #8b7458;background:#efe3c9;color:var(--ink);padding:13px 15px;text-align:left;cursor:pointer;box-shadow:4px 5px 8px #48331d22}.card small{font:700 8px Arial,sans-serif;text-transform:uppercase;color:#8a6d4c}.card strong{display:block;font:700 18px Georgia,serif;margin:3px 0}.card span{font:11px Georgia,serif;color:#6d5942}
-.entryBar{max-width:1240px;margin:10px auto 8px;display:flex;justify-content:flex-end;gap:8px}.entryBar button{border:1px solid #5a4331;background:#17110d;color:#cdb998;padding:7px 10px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}.entryBar button:disabled{opacity:.28;cursor:default}.entryBar .entryspacer{flex:1}.generatedSpread img{cursor:zoom-in}.zoomModal{display:none;position:fixed;inset:0;z-index:500;background:#070503f2;overflow:hidden;touch-action:none}.zoomModal.show{display:block}.zoomCanvas{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}.zoomCanvas img{max-width:92vw;max-height:92vh;user-select:none;-webkit-user-drag:none;transform-origin:center center;will-change:transform;cursor:grab}.zoomCanvas img.dragging{cursor:grabbing}.zoomControls{position:absolute;z-index:3;top:14px;right:14px;display:flex;gap:7px}.zoomControls button{width:38px;height:38px;border:1px solid #725c42;background:#17110de8;color:#eadabd;font:700 18px Georgia,serif;cursor:pointer}.zoomHint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:3;color:#bba98c;font:10px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;background:#120d09cc;padding:7px 10px;border:1px solid #4c3a2a}.generatedWrap{max-width:1240px;margin:0 auto;position:relative;padding-bottom:24px}.generatedSpread{display:grid;grid-template-columns:1fr 1fr;gap:2px;align-items:start;filter:drop-shadow(0 30px 35px #0009)}.generatedSpread img{display:block;width:100%;height:auto}.generatedSpread img:first-child{border-radius:8px 0 0 8px}.generatedSpread img:last-child{border-radius:0 8px 8px 0}.generatedSpread.singleImage{display:block;max-width:1240px;margin:0 auto}.generatedSpread.singleImage img{width:100%;border-radius:8px}.generatedWrap.singleImage .generatedGutter{display:none}.generatedGutter{position:absolute;left:50%;top:10px;bottom:34px;width:16px;transform:translateX(-50%);background:linear-gradient(90deg,transparent,#0005,#fff1,transparent);pointer-events:none}.placeholderSpread{max-width:1180px;margin:0 auto;padding:60px;color:#2b2016;background:var(--paper);border:1px solid #7c6548;border-radius:8px;font:18px Georgia,serif;min-height:600px}
-.modal{display:none;position:fixed;inset:0;background:#000c;z-index:100;align-items:center;justify-content:center}.modal.show{display:flex}.modalbox{width:min(400px,90%);background:#17120f;border:1px solid #493a2d;padding:22px;text-align:center}.modalbox button{width:100%;padding:10px;margin-top:8px;border:0}.yes{background:var(--red);color:white}.no{background:#25201b;color:#c9beac}
-@media(max-width:950px){.nav,.quick{display:none}.head{grid-template-columns:1fr}.folio{grid-template-columns:1fr;max-width:680px}.gutter{display:none}.library{margin-left:-16px;margin-right:-16px;border-radius:0}.generatedSpread{grid-template-columns:1fr;gap:10px}.generatedSpread img{border-radius:8px!important}.generatedGutter{display:none}.indexrow{grid-template-columns:36px 1fr}.indexmeta{display:none}}
+:root{
+ --ink:#120f0d;--ink2:#1b1511;--ink3:#241b16;--paper:#ead9ba;--gold:#c6a66a;
+ --gold2:#8d7045;--cream:#f1e7d4;--muted:#a99579;--line:#ffffff16;--shadow:#000c;
+}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--ink);color:var(--cream);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}button,input{font:inherit}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:
+ radial-gradient(circle at 50% 42%,#5f45301b 0,transparent 42%),
+ linear-gradient(180deg,#251b15 0,#15110e 52%,#0d0b09 100%);z-index:-2}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;z-index:-1;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E")}
+.app{height:100dvh;display:grid;grid-template-rows:auto 1fr;position:relative}
+.chrome{position:relative;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 10px) 12px 4px;min-height:54px}
+.chrome-left,.chrome-right{display:flex;align-items:center;gap:8px}.volume{font-family:Georgia,'Times New Roman',serif;letter-spacing:.13em;text-transform:uppercase;font-size:10px;color:#c8af89;opacity:.86}
+.icon{height:38px;min-width:38px;border:1px solid #b8956038;background:#18120fbd;color:#e9dcc6;border-radius:999px;display:grid;place-items:center;padding:0 12px;font-weight:800;box-shadow:0 8px 22px #0005;backdrop-filter:blur(10px)}
+.icon:active{transform:scale(.97)}.icon .label{margin-left:7px;font-size:11px;letter-spacing:.03em}.searchIcon{font-size:19px;line-height:1}
+.viewer{position:relative;min-height:0;overflow:hidden;display:grid;place-items:center;padding:6px 10px calc(env(safe-area-inset-bottom) + 64px);touch-action:none}
+.stage{position:relative;display:grid;place-items:center;max-width:100%;max-height:100%;transform-origin:center;will-change:transform;transition:opacity .16s ease}
+.art{display:block;width:auto;height:auto;object-fit:contain;user-select:none;-webkit-user-drag:none;filter:drop-shadow(0 22px 34px #000a) drop-shadow(0 2px 1px #000b)}
+.art.single{max-width:min(calc(100vw - 26px),780px);max-height:calc(100dvh - 112px)}
+.art.double{max-width:min(calc(100vw - 18px),1650px);max-height:calc(100dvh - 126px)}
+.art.spreadLeaf{max-width:min(calc(100vw - 18px),760px);max-height:calc(100dvh - 106px)}
+/* book feel is atmospheric: the art itself is the page */
+.stage:has(.art.single):before{content:"";position:absolute;inset:8px -4px -8px 4px;border-radius:3px;background:#8f704d24;filter:blur(8px);z-index:-1}
+.spreadHint{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 66px);transform:translateX(-50%);font-family:Georgia,'Times New Roman',serif;font-size:10px;letter-spacing:.08em;color:#cab58f9e;pointer-events:none;opacity:0;transition:opacity .2s}.viewer.spread .spreadHint{opacity:1}
+.navFloat{position:fixed;z-index:25;left:50%;bottom:calc(env(safe-area-inset-bottom) + 10px);transform:translateX(-50%);display:grid;grid-template-columns:42px minmax(120px,auto) 42px;align-items:center;gap:5px;padding:5px;background:#120e0bd9;border:1px solid #b8956030;border-radius:999px;box-shadow:0 12px 34px #0009;backdrop-filter:blur(14px)}
+.navArrow{width:42px;height:38px;border:0;background:transparent;color:#e9dcc6;border-radius:999px;font-size:23px;display:grid;place-items:center}.navArrow:disabled{opacity:.18}.meta{text-align:center;min-width:0;padding:0 8px}.name{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.count{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#9f8c70;margin-top:1px}
+.hit{position:absolute;top:0;bottom:56px;width:22%;z-index:8}.hit.left{left:0}.hit.right{right:0}
+.searchWrap{display:none;position:fixed;z-index:70;top:calc(env(safe-area-inset-top) + 8px);left:10px;right:10px}.searchWrap.open{display:block}.searchWrap input{width:100%;height:46px;border:1px solid #b8956055;background:#130f0de8;color:#f4ead8;border-radius:14px;padding:0 45px 0 15px;outline:none;box-shadow:0 16px 44px #000b;backdrop-filter:blur(16px)}.searchClose{position:absolute;right:6px;top:5px;width:36px;height:36px;border:0;background:transparent;color:#d9c7ac;font-size:20px}
+.results{position:fixed;z-index:68;top:calc(env(safe-area-inset-top) + 62px);left:10px;right:10px;max-height:58vh;overflow:auto;background:#17110eea;border:1px solid #b8956040;border-radius:14px;padding:7px;box-shadow:0 22px 55px #000c;display:none;backdrop-filter:blur(16px)}.results.open{display:block}.result{width:100%;text-align:left;border:0;background:transparent;color:#eee0ca;padding:10px;border-radius:9px}.result:hover{background:#ffffff0b}.result small{display:block;color:#9d8a72;margin-top:2px}
+/* Contents becomes the visual book/index layer */
+.contentsBackdrop{position:fixed;inset:0;z-index:49;background:#070604b8;opacity:0;pointer-events:none;transition:opacity .24s;backdrop-filter:blur(6px)}.contentsBackdrop.open{opacity:1;pointer-events:auto}
+.contents{position:fixed;z-index:50;inset:0;background:linear-gradient(180deg,#211711 0,#120f0c 100%);transform:translateY(102%);transition:transform .28s cubic-bezier(.2,.85,.25,1);display:grid;grid-template-rows:auto auto 1fr;padding-top:env(safe-area-inset-top);box-shadow:0 -24px 70px #000d}.contents.open{transform:translateY(0)}
+.contentsHead{display:flex;align-items:center;gap:12px;padding:17px 16px 12px;border-bottom:1px solid var(--line)}.contentsTitle{min-width:0;flex:1}.contentsKicker{font-size:9px;text-transform:uppercase;letter-spacing:.18em;color:#a99170}.contentsTitle h2{font-family:Georgia,'Times New Roman',serif;font-size:25px;font-weight:500;margin:2px 0 0;color:#f0e2ca}.closeContents{width:40px;height:40px;border-radius:999px;border:1px solid #b8956035;background:#17110d;color:#e8dac2;font-size:20px}
+.catRail{display:flex;gap:7px;overflow-x:auto;padding:10px 12px 8px;scrollbar-width:none;border-bottom:1px solid #ffffff0b}.catRail::-webkit-scrollbar{display:none}.cat{border:0;border-bottom:1px solid transparent;background:transparent;color:#a99272;padding:7px 7px 6px;font-size:10px;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}.cat.active{color:#f0dfc4;border-color:#c4a469}
+.catalogue{overflow:auto;padding:12px 12px calc(env(safe-area-inset-bottom) + 28px)}.section{margin:4px 0 20px}.sectionHead{display:flex;align-items:center;gap:9px;margin:0 3px 9px}.sectionHead h3{font-family:Georgia,'Times New Roman',serif;font-weight:500;font-size:15px;margin:0;color:#d8c29f}.rule{height:1px;flex:1;background:linear-gradient(90deg,#b7955a55,transparent)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.entry{position:relative;min-height:0;border:1px solid #b7955a26;background:linear-gradient(145deg,#2a2019,#18120e);color:#ebddc4;border-radius:12px;padding:10px 10px 9px;text-align:left;overflow:hidden;box-shadow:0 8px 22px #0004}.entry:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,#ffffff07,transparent 38%);pointer-events:none;z-index:2}
+.entryThumb{position:relative;height:128px;margin:-10px -10px 10px;overflow:hidden;background:#0d0a08;border-bottom:1px solid #b7955a20}
+.entryThumb img{width:100%;height:100%;display:block;object-fit:cover;object-position:50% 28%;filter:saturate(.92) contrast(1.02)}
+.entry.double .entryThumb img{object-position:50% 42%}
+.entryName,.entryType{z-index:3}
+.entryPageBadge{position:absolute;right:8px;top:8px;z-index:4;padding:3px 6px;border:1px solid #d1b27645;border-radius:999px;background:#120e0bc9;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:#d9c39e}.entryName{position:relative;font-family:Georgia,'Times New Roman',serif;font-size:14px;font-weight:700;line-height:1.08}.entryType{position:relative;margin-top:5px;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#9f896b}.entry.active{border-color:#c7a66a7a;background:linear-gradient(145deg,#36281e,#1b140f)}.entry.missing{opacity:.42}.entry.missing:after{content:"Pending";position:absolute;right:8px;bottom:7px;font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:#b7a58d}
+.placeholder{width:min(82vw,620px);aspect-ratio:5/7;display:grid;place-items:center;text-align:center;padding:30px;border:1px solid #a6814d33;border-radius:8px;background:#1c1510;color:#bfae93}.placeholder b{display:block;font-family:Georgia,'Times New Roman',serif;font-size:24px;color:#e9dcc5;margin-bottom:8px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.catalogue{padding-left:max(18px,calc((100vw - 1000px)/2));padding-right:max(18px,calc((100vw - 1000px)/2))}.contentsHead,.catRail{padding-left:max(18px,calc((100vw - 1000px)/2));padding-right:max(18px,calc((100vw - 1000px)/2))}}
+@media(max-width:520px){.volume{display:none}.entryThumb{height:122px}.icon .label{display:none}.chrome{padding-left:8px;padding-right:8px}.viewer{padding-left:5px;padding-right:5px}.art.single{max-width:calc(100vw - 12px);max-height:calc(100dvh - 104px)}.art.double{max-width:calc(100vw - 8px);max-height:calc(100dvh - 118px)}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
 <div class="app">
-<header><div class="head"><div class="brand" data-go="library">Crawler Archive</div><nav class="nav"><button data-go="library">Library</button><button data-go="search">Search</button><button data-category="Main cast">Main cast</button><button data-category="Allies">Allies</button><button data-category="NPCs">NPCs</button><button data-category="Enemies">Enemies</button><button data-category="Monsters">Monsters</button><button data-category="Bosses">Bosses</button></nav><input class="quick" placeholder="Search archive..." data-go-on-enter="search"></div></header>
-<main>
-<section id="library" class="view active">
-<div class="identity"><div class="the">THE</div><div class="crawler">CRAWLER</div><div class="archive"><b>ARCHIVE</b></div></div>
-<div class="library"><div class="bookgrid">
-<div class="book unlocked" data-book="1"><div class="bookobj"><div class="spine"></div><div class="cover"><img src="https://www.tanukigamesatx.com/cdn/shop/files/ran20247_web_front__58691.1740332607_2048x.png?v=1774543029"></div><div class="pages"></div></div><small>BOOK I</small><strong>Dungeon Crawler Carl</strong><span>Unlocked</span></div>
-<div class="book unlocked" data-book="2"><div class="bookobj"><div class="spine"></div><div class="cover"><img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1608612407i/56377548.jpg"></div><div class="pages"></div></div><small>BOOK II</small><strong>Carl's Doomsday Scenario</strong><span>Unlocked</span></div>
-<div class="book unlocked" data-book="3"><div class="bookobj"><div class="spine"></div><div class="cover"><img src="https://books.texttospeech.io/img-cdn/VXNUWEFaUTBSRnVPdXB1aWFpVklBTU1TRmJ2Z3JncUxXU3RGblU3aXpDVm4zeldzVWFkTlVzQW1jUTFGZlZmaEl4VUNLc3VFUW9QOEw3dmtUcGFpQmtMVw%3D%3D.jpg"></div><div class="pages"></div></div><small>BOOK III</small><strong>The Dungeon Anarchist's Cookbook</strong><span>Unlocked</span></div>
-<div class="book locked" data-unlock="4"><div class="bookobj"><div class="spine"></div><div class="cover"><img src="https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1625305082i/58477587.jpg"></div><div class="pages"></div><div class="lock"></div></div><small>BOOK IV</small><strong>The Gate of the Feral Gods</strong><span>Locked</span></div>
-<div class="book locked" data-unlock="5"><div class="bookobj"><div class="spine"></div><div class="cover"><img src="https://atomicbooks.com/cdn/shop/files/butchersmasquer.jpg?v=1748534552"></div><div class="pages"></div><div class="lock"></div></div><small>BOOK V</small><strong>The Butcher's Masquerade</strong><span>Locked</span></div>
-<div class="shelf"></div>
-<div class="book locked" data-unlock="6"><div class="bookobj"><div class="spine"></div><div class="cover"><img src="https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1734098749i/220772912.jpg"></div><div class="pages"></div><div class="lock"></div></div><small>BOOK VI</small><strong>The Eye of the Bedlam Bride</strong><span>Locked</span></div>
-<div class="book locked" data-unlock="7"><div class="bookobj"><div class="spine"></div><div class="cover"><div class="sealed">SEALED</div></div><div class="pages"></div><div class="lock"></div></div><small>BOOK VII</small><strong>Sealed Volume</strong><span>Locked</span></div>
-<div class="book locked" data-unlock="8"><div class="bookobj"><div class="spine"></div><div class="cover"><div class="sealed">SEALED</div></div><div class="pages"></div><div class="lock"></div></div><small>BOOK VIII</small><strong>Sealed Volume</strong><span>Locked</span></div>
-<div class="book locked" data-unlock="9"><div class="bookobj"><div class="spine"></div><div class="cover"><div class="sealed">SEALED</div></div><div class="pages"></div><div class="lock"></div></div><small>BOOK IX</small><strong>Sealed Volume</strong><span>Locked</span></div>
-<div class="book locked" data-unlock="10"><div class="bookobj"><div class="spine"></div><div class="cover"><div class="sealed">SEALED</div></div><div class="pages"></div><div class="lock"></div></div><small>BOOK X</small><strong>Sealed Volume</strong><span>Locked</span></div>
-</div></div>
-</section>
-
-<section id="book" class="view"><div class="stage"><button class="back" data-go="library">← LIBRARY</button><div class="folio">
-<section class="leaf left"><div class="contentsL"><div class="kicker" id="volumeKicker">VOLUME I · VISUAL ARCHIVE COPY</div><div class="covermount"><img id="bookCover"></div><div class="stamp">UNLOCKED</div></div></section>
-<section class="leaf right"><div class="contentsR"><div class="kicker" id="bookKicker">BOOK I · ARCHIVE CONTENTS</div><h1 class="booktitle" id="bookTitle"></h1><div class="redrule"></div><p class="intro">A visual field guide frozen at the end of this volume. Choose a section below; later-book forms, gear and identities remain sealed.</p><div style="margin-top:24px">
-<button class="toc-row" data-category="Main cast"><span>01</span><b>Main cast</b><i></i><em>04</em></button>
-<button class="toc-row" data-category="Allies"><span>02</span><b>Allies</b><i></i><em>18</em></button>
-<button class="toc-row" data-category="NPCs"><span>03</span><b>NPCs</b><i></i><em>36</em></button>
-<button class="toc-row" data-category="Enemies"><span>04</span><b>Enemies</b><i></i><em>52</em></button>
-<button class="toc-row" data-category="Monsters"><span>05</span><b>Monsters</b><i></i><em>66</em></button>
-<button class="toc-row" data-category="Bosses"><span>06</span><b>Bosses</b><i></i><em>84</em></button>
-</div></div></section><div class="gutter"></div>
-</div></div></section>
-
-<section id="characters" class="view"><div class="stage"><button class="back" data-go="book">← CONTENTS</button><div id="categoryFolio" class="folio"></div></div></section>
-
-<section id="master" class="view"><div class="stage"><button class="back" data-go="search">← SEARCH</button><div class="folio">
-<section class="leaf left"><div class="masterL"><div class="kicker">DCC PERSONNEL FILE · MASTER IDENTITY</div><h1 id="masterName">Carl</h1><p class="masterSummary">Global identity record. Use this page when you arrived through search and need the quick “who the fuck was this?” answer across the books you have already unlocked.</p><div class="masterMeta"><div class="idrow"><b>First appearance</b><span>Book I</span></div><div class="idrow"><b>Visible through</b><span>Book III</span></div><div class="idrow"><b>Category</b><span id="masterCategory">Main cast</span></div></div></div></section>
-<section class="leaf right"><div class="masterR"><div class="kicker">UNLOCKED VERSIONS</div><h2 class="versionHeading">Choose a book state</h2><p class="versionIntro">Only needed here because this is the global identity page. Book-scoped browsing skips this screen entirely.</p><div class="versionlist">
-<button class="versionrow" data-entry="I"><span class="versionbook">BOOK I</span><span class="versionname">End-of-book reference</span><span class="versionstate">Unlocked</span></button>
-<button class="versionrow" data-entry="II"><span class="versionbook">BOOK II</span><span class="versionname">End-of-book reference</span><span class="versionstate">Unlocked</span></button>
-<button class="versionrow" data-entry="III"><span class="versionbook">BOOK III</span><span class="versionname">End-of-book reference</span><span class="versionstate">Unlocked</span></button>
-<div class="versionrow locked"><span class="versionbook">BOOK IV</span><span class="versionname">Sealed</span><span class="versionstate">Locked</span></div>
-</div></div></section><div class="gutter"></div>
-</div></div></section>
-
-<section id="entry" class="view"><div class="stage"><button class="back" id="entryBack">← SECTION</button>
-<div class="entryBar"><button id="prevEntry">← Previous</button><button id="nextEntry">Next →</button><span class="entryspacer"></span><button id="masterShortcut">Master identity</button></div>
-<div id="generatedEntry" class="generatedWrap" style="display:none"><div class="generatedSpread" id="generatedSpread"></div><div class="generatedGutter"></div></div>
-<div id="placeholderEntry" class="placeholderSpread" style="display:none"></div>
-</div></section>
-
-<section id="search" class="view"><div class="stage"><button class="back" data-go="library">← LIBRARY</button><div class="folio">
-<section class="leaf left"><div class="searchL"><div class="kicker">ARCHIVE CATALOGUE · UNLOCKED MATERIAL</div><h1>Who the fuck<br>was that?</h1><p>Search globally when you are not already browsing a specific book.</p><div class="cataloginput"><input id="catalogSearch" value="Odette" placeholder="Name, alias, creature..."></div><div class="filters"><button data-filter="All">All</button><button data-filter="Main cast">Main cast</button><button data-filter="Allies">Allies</button><button data-filter="NPCs">NPCs</button><button data-filter="Enemies">Enemies</button><button data-filter="Monsters">Monsters</button><button data-filter="Bosses">Bosses</button></div></div></section>
-<section class="leaf right"><div class="searchR"><div class="kicker" style="margin-bottom:12px">MATCHING RECORDS</div><div id="results" class="results"></div></div></section><div class="gutter"></div>
-</div></div></section>
-</main>
-
-<div id="zoomModal" class="zoomModal" aria-hidden="true"><div class="zoomCanvas"><img id="zoomImg" alt=""></div><div class="zoomControls"><button id="zoomOut" aria-label="Zoom out">−</button><button id="zoomReset" aria-label="Reset zoom">1×</button><button id="zoomIn" aria-label="Zoom in">+</button><button id="zoomClose" aria-label="Close zoom">×</button></div><div class="zoomHint">Wheel or pinch to zoom · drag when zoomed · Esc to close</div></div><div id="modal" class="modal"><div class="modalbox"><h2>Unlock Book <span id="unlockNum"></span>?</h2><p>This reveals that volume's reference material.</p><button class="yes" data-close-modal>I've finished it — unlock</button><button class="no" data-close-modal>Cancel</button></div></div>
+<header class="chrome">
+ <div class="chrome-left"><button class="icon" id="contentsBtn" aria-label="Contents">☰<span class="label">Contents</span></button><div class="volume">Dungeon Crawler Carl · Book I</div></div>
+ <div class="chrome-right"><button class="icon" id="searchBtn" aria-label="Search"><span class="searchIcon">⌕</span></button></div>
+</header>
+<main class="viewer" id="viewer"><div class="stage" id="stage"></div><div class="hit left" id="hitLeft"></div><div class="hit right" id="hitRight"></div><div class="spreadHint">OPEN SPREAD · PINCH TO INSPECT</div></main>
+<div class="navFloat"><button class="navArrow" id="prev" aria-label="Previous">‹</button><div class="meta"><div class="name" id="name"></div><div class="count" id="count"></div></div><button class="navArrow" id="next" aria-label="Next">›</button></div>
 </div>
-
+<div class="searchWrap" id="searchWrap"><input id="search" placeholder="Search Book 1…" autocomplete="off"><button class="searchClose" id="searchClose">×</button></div><div class="results" id="results"></div>
+<div class="contentsBackdrop" id="contentsBackdrop"></div>
+<section class="contents" id="contents"><div class="contentsHead"><div class="contentsTitle"><div class="contentsKicker">Crawler archive · volume one</div><h2>Contents</h2></div><button class="closeContents" id="contentsClose">×</button></div><div class="catRail" id="catRail"></div><div class="catalogue" id="catalogue"></div></section>
 <script>
-const LEGACY_DATA={"Main cast":["Carl","Princess Donut","Mordecai","Mongo","Katia Grim"],"Allies":["Imani","Elle McGibbons","Prepotente","Miriam Dom","Li Jun","Li Na","Florin","Bianca","Brandon Andrews","Chris Andrews"],"NPCs":["Zev","Odette","System AI","Chaco","Loita"],"Enemies":["Prince Maestro","Frank Q","Maggie My","Tsarina Signet"],"Monsters":["Goblin Engineers","Lava Llamas","Troglodytes","Clurichauns","Laminaks","Mind Horrors","Krakaren Hatchlings","Station Mimics"],"Bosses":["The Hoarder","The Juicer","Ball of Swine","Krakaren","Rage Elemental","Heather the Bear","Ringmaster Grimaldi","Remex the Grand","Gore-Gore the ManTauR","Dismember the War Mage","Mimic Rex","Grull"]};
-const BOOK1_DATA={"Main cast":["Carl","Princess Donut","Mordecai","Mongo"],"Allies":["Imani","Li Jun","Li Na","Zhang","Brandon An","Chris Andrews","Yolanda Martinez","Agatha","Ifechi"],"NPCs":["Zev","Odette","System AI","Lexis","Tally"],"Enemies":["Prince Maestro","Frank Q","Maggie My"],"Monsters":["Goblin Engineers","Lava Llamas","Rot Stickers","Scatterers","Acid Slimes","Troglodytes","Mind Horrors","Clurichauns","Laminaks","Brindle Grubs","Danger Dingoes","Brindled Vespa"],"Bosses":["The Hoarder","Goblin Chieftain","The Juicer","Ball of Swine","Krakaren Clone","Rage Elemental"]};
-const dataForBook=()=>currentBook===1?BOOK1_DATA:LEGACY_DATA;
-const BOOK1_ASSETS={
-  "Carl":["./assets/carl-book1-left.webp","./assets/carl-book1-right.webp"],
-  "Princess Donut":["./assets/princess-donut-book1-left.webp","./assets/princess-donut-book1-right.webp"],
-  "Mordecai":["./assets/mordecai-book1-left.webp","./assets/mordecai-book1-right.webp"],
-  "Mongo":["./assets/mongo-book1-left.webp","./assets/mongo-book1-right.webp"],
-  "Imani":["./assets/imani-book1-left.webp","./assets/imani-book1-right.webp"],
-  "Odette":["./assets/odette-book1-left.webp","./assets/odette-book1-right.webp"],
-  "Yolanda Martinez":["./assets/yolanda-martinez-book1.webp"],
-  "Li Na":["./assets/li-na-book1.webp"],
-  "Brandon An":["./assets/brandon-andrews-book1.webp"],
-  "Brandon Andrews":["./assets/brandon-andrews-book1.webp"],
-  "Chris Andrews":["./assets/chris-andrews-book1.webp"],
-  "Agatha":["./assets/agatha-book1.webp"],
-  "Maggie My":["./assets/maggie-my-book1.webp"],
-  "The Hoarder":["./assets/the-hoarder-book1.webp"],
-  "The Juicer":["./assets/the-juicer-book1.webp"],
-  "Ball of Swine":["./assets/ball-of-swine-book1.webp"],
-  "Krakaren Clone":["./assets/krakaren-clone-book1.webp"],
-  "Rage Elemental":["./assets/rage-elemental-book1.webp"]
+const ITEMS=[{"name":"Carl","category":"Main cast","slug":"carl","asset":"assets/carl.webp"},{"name":"Princess Donut","category":"Main cast","slug":"princess-donut","asset":"assets/princess-donut.webp"},{"name":"Mordecai","category":"Main cast","slug":"mordecai","asset":"assets/mordecai.webp"},{"name":"Mongo","category":"Main cast","slug":"mongo","asset":"assets/mongo.webp"},{"name":"Brandon Andrews","category":"Main groups / recurring crawlers","slug":"brandon-andrews","asset":"assets/brandon-andrews.webp"},{"name":"Chris Andrews","category":"Main groups / recurring crawlers","slug":"chris-andrews","asset":"assets/chris-andrews.webp"},{"name":"Imani","category":"Main groups / recurring crawlers","slug":"imani","asset":"assets/imani.webp"},{"name":"Yolanda Martinez","category":"Main groups / recurring crawlers","slug":"yolanda-martinez","asset":"assets/yolanda-martinez.webp"},{"name":"Elle McGibbons","category":"Main groups / recurring crawlers","slug":"elle-mcgibbons","asset":"assets/elle-mcgibbons.webp"},{"name":"Agatha","category":"Main groups / recurring crawlers","slug":"agatha","asset":"assets/agatha.webp"},{"name":"Li Jun","category":"Main groups / recurring crawlers","slug":"li-jun","asset":"assets/li-jun.webp"},{"name":"Li Na","category":"Main groups / recurring crawlers","slug":"li-na","asset":"assets/li-na.webp"},{"name":"Zhang","category":"Main groups / recurring crawlers","slug":"zhang","asset":null},{"name":"Prepotente","category":"Main groups / recurring crawlers","slug":"prepotente","asset":"assets/prepotente.webp"},{"name":"Bianca","category":"Main groups / recurring crawlers","slug":"bianca","asset":null},{"name":"Lucia Mar","category":"Main groups / recurring crawlers","slug":"lucia-mar","asset":null},{"name":"Cici","category":"Main groups / recurring crawlers","slug":"cici","asset":null},{"name":"Gustavo 3","category":"Main groups / recurring crawlers","slug":"gustavo-3","asset":null},{"name":"Zev","category":"Misc NPC / media / dungeon people","slug":"zev","asset":null},{"name":"Odette","category":"Misc NPC / media / dungeon people","slug":"odette","asset":"assets/odette.webp"},{"name":"System AI","category":"Misc NPC / media / dungeon people","slug":"system-ai","asset":null},{"name":"Goblin Murder Dozer / Goblin Engineers","category":"Misc monsters","slug":"goblin-murder-dozer","asset":"assets/goblin-murder-dozer.webp"},{"name":"Lava Llamas","category":"Misc monsters","slug":"lava-llamas","asset":null},{"name":"Troglodytes","category":"Misc monsters","slug":"troglodytes","asset":"assets/troglodytes.webp"},{"name":"Clurichauns","category":"Misc monsters","slug":"clurichauns","asset":"assets/clurichauns.webp"},{"name":"Laminaks","category":"Misc monsters","slug":"laminaks","asset":"assets/laminaks.webp"},{"name":"Mind Horrors","category":"Misc monsters","slug":"mind-horrors","asset":null},{"name":"Prince Maestro","category":"Villains / hostile recurring","slug":"prince-maestro","asset":null},{"name":"Frank Q","category":"Villains / hostile recurring","slug":"frank-q","asset":null},{"name":"Maggie My","category":"Villains / hostile recurring","slug":"maggie-my","asset":"assets/maggie-my.webp"},{"name":"The Hoarder","category":"Bosses / major threats","slug":"the-hoarder","asset":"assets/the-hoarder.webp"},{"name":"The Juicer","category":"Bosses / major threats","slug":"the-juicer","asset":"assets/the-juicer.webp"},{"name":"Ball of Swine","category":"Bosses / major threats","slug":"ball-of-swine","asset":"assets/ball-of-swine.webp"},{"name":"Krakaren Clone","category":"Bosses / major threats","slug":"krakaren-clone","asset":"assets/krakaren-clone.webp"},{"name":"Rage Elemental","category":"Bosses / major threats","slug":"rage-elemental","asset":"assets/rage-elemental.webp"}];
+const CAT_LABEL={'Main cast':'Cast','Main groups / recurring crawlers':'Groups','Misc NPC / media / dungeon people':'NPC','Misc monsters':'Monsters','Villains / hostile recurring':'Villains','Bosses / major threats':'Bosses'};
+const DOUBLES=new Set(['carl','princess-donut','mordecai','mongo','imani','odette']);
+const DOUBLE_PAGES={
+ 'carl':['assets/carl-p1.webp','assets/carl-p2.webp'],
+ 'princess-donut':['assets/princess-donut-p1.webp','assets/princess-donut-p2.webp'],
+ 'mordecai':['assets/mordecai-p1.webp','assets/mordecai-p2.webp'],
+ 'mongo':['assets/mongo-p1.webp','assets/mongo-p2.webp'],
+ 'imani':['assets/imani-p1.webp','assets/imani-p2.webp'],
+ 'odette':['assets/odette-p1.webp','assets/odette-p2.webp']
 };
-
-const META={"Main cast":["01","The core party and central figures of this volume."],"Allies":["02","Friendly crawlers, companions and recurring support figures."],"NPCs":["03","Dungeon staff, media personalities and non-crawler figures."],"Enemies":["04","Named hostile and antagonistic recurring characters."],"Monsters":["05","Species, mobs and non-boss creatures encountered in the dungeon."],"Bosses":["06","Major named encounters and boss-level threats."]};
-const BOOKS={
-  1:{roman:"I",title:"Dungeon Crawler Carl",cover:"https://www.tanukigamesatx.com/cdn/shop/files/ran20247_web_front__58691.1740332607_2048x.png?v=1774543029"},
-  2:{roman:"II",title:"Carl's Doomsday Scenario",cover:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1608612407i/56377548.jpg"},
-  3:{roman:"III",title:"The Dungeon Anarchist's Cookbook",cover:"https://books.texttospeech.io/img-cdn/VXNUWEFaUTBSRnVPdXB1aWFpVklBTU1TRmJ2Z3JncUxXU3RGblU3aXpDVm4zeldzVWFkTlVzQW1jUTFGZlZmaEl4VUNLc3VFUW9QOEw3dmtUcGFpQmtMVw%3D%3D.jpg"}
-};
-let currentBook=1,currentCategory="Main cast",currentName="Carl",entryOrigin="book";
-const views=[...document.querySelectorAll(".view")];
-
-function go(id){views.forEach(v=>v.classList.toggle("active",v.id===id));window.scrollTo(0,0);if(id==="search")renderCatalog("All")}
-function openBook(n){currentBook=Number(n);const b=BOOKS[currentBook];document.getElementById("volumeKicker").textContent="VOLUME "+b.roman+" · VISUAL ARCHIVE COPY";document.getElementById("bookKicker").textContent="BOOK "+b.roman+" · ARCHIVE CONTENTS";document.getElementById("bookTitle").textContent=b.title;document.getElementById("bookCover").src=b.cover;go("book")}
-function renderCategory(name){currentCategory=name;const arr=dataForBook()[name]||[],meta=META[name],single=arr.length<=6,cut=single?arr.length:Math.ceil(arr.length/2);const make=(items,offset)=>'<div class="indexlist">'+items.map((n,i)=>'<button class="indexrow" data-book-person="'+n.replaceAll('"','&quot;')+'" data-person-category="'+name+'"><span class="indexnum">'+String(offset+i+1).padStart(2,"0")+'</span><span class="indexname">'+n+'</span><span class="indexmeta">Book '+BOOKS[currentBook].roman+' reference</span></button>').join("")+'</div>';const left='<section class="leaf left"><div class="catpage"><div class="kicker">SECTION '+meta[0]+' · BOOK '+BOOKS[currentBook].roman+' ARCHIVE</div><h1>'+name+'</h1><div class="redrule"></div><p>'+meta[1]+'</p>'+make(arr.slice(0,cut),0)+'</div></section>';const right=single?'':'<section class="leaf right"><div class="catpage"><div class="kicker">SECTION '+meta[0]+' · CONTINUED</div>'+make(arr.slice(cut),cut)+'</div></section><div class="gutter"></div>';const folio=document.getElementById("categoryFolio");folio.classList.toggle("single",single);folio.innerHTML=left+right;go("characters")}
-function openBookPerson(name,cat){currentName=name;currentCategory=cat;entryOrigin="book";openEntry(BOOKS[currentBook].roman)}
-function openMaster(name,cat){currentName=name;currentCategory=cat;document.getElementById("masterName").textContent=name;document.getElementById("masterCategory").textContent=cat;go("master")}
-function updateEntryNav(){const arr=dataForBook()[currentCategory]||[],i=arr.indexOf(currentName);document.getElementById("prevEntry").disabled=i<=0;document.getElementById("nextEntry").disabled=i<0||i>=arr.length-1}
-function navigateEntry(delta){if(document.getElementById("zoomModal").classList.contains("show"))return;const arr=dataForBook()[currentCategory]||[],i=arr.indexOf(currentName),n=i+delta;if(n<0||n>=arr.length)return;currentName=arr[n];entryOrigin="book";openEntry(BOOKS[currentBook].roman)}
-function openEntry(roman){
-  const assets=roman==="I"?BOOK1_ASSETS[currentName]:null;
-  const real=Array.isArray(assets)&&assets.length>0;
-  const wrap=document.getElementById("generatedEntry");
-  const spread=document.getElementById("generatedSpread");
-  wrap.style.display=real?"block":"none";
-  const ph=document.getElementById("placeholderEntry");
-  ph.style.display=real?"none":"block";
-  if(real){
-    const single=assets.length===1;
-    wrap.classList.toggle("singleImage",single);
-    spread.classList.toggle("singleImage",single);
-    spread.innerHTML=assets.map((src,i)=>'<img src="'+src+'" alt="'+currentName+' Book '+roman+(single?' dossier':' page '+(i+1))+'">').join("");
-  }else{
-    wrap.classList.remove("singleImage");
-    spread.classList.remove("singleImage");
-    spread.innerHTML="";
-    ph.innerHTML='<div class="kicker">BOOK '+roman+' · CHARACTER STUDY</div><h1 style="font:700 52px Georgia,serif;margin:12px 0">'+currentName+' — Book '+roman+'</h1><p>This book-specific visual spread has not been generated yet.</p>';
-  }
-  document.getElementById("entryBack").textContent=entryOrigin==="master"?"← MASTER IDENTITY":"← "+currentCategory.toUpperCase();
-  updateEntryNav();
-  go("entry");
-}
-function renderCatalog(filter){const q=(document.getElementById("catalogSearch")?.value||"").toLowerCase();let rows=[];for(const [cat,names] of Object.entries(dataForBook())){if(filter!=="All"&&filter!==cat)continue;for(const name of names)rows.push({cat,name})}if(q)rows=rows.filter(x=>x.name.toLowerCase().includes(q)||x.cat.toLowerCase().includes(q));document.getElementById("results").innerHTML=rows.slice(0,8).map(x=>'<button class="card" data-search-person="'+x.name.replaceAll('"','&quot;')+'" data-person-category="'+x.cat+'"><small>'+x.cat+'</small><strong>'+x.name+'</strong><span>Global identity record</span></button>').join("")||'<p style="color:#6d5942;font-family:Georgia,serif">No unlocked record matches.</p>'}
-document.addEventListener("click",e=>{
-  const cat=e.target.closest("[data-category]");if(cat){renderCategory(cat.dataset.category);return}
-  const g=e.target.closest("[data-go]");if(g){go(g.dataset.go);return}
-  const b=e.target.closest("[data-book]");if(b){openBook(b.dataset.book);return}
-  const bp=e.target.closest("[data-book-person]");if(bp){openBookPerson(bp.dataset.bookPerson,bp.dataset.personCategory);return}
-  const sp=e.target.closest("[data-search-person]");if(sp){openMaster(sp.dataset.searchPerson,sp.dataset.personCategory);return}
-  const ent=e.target.closest("[data-entry]");if(ent){entryOrigin="master";openEntry(ent.dataset.entry);return}
-  const f=e.target.closest("[data-filter]");if(f){renderCatalog(f.dataset.filter);return}
-  const ul=e.target.closest("[data-unlock]");if(ul){document.getElementById("unlockNum").textContent=ul.dataset.unlock;document.getElementById("modal").classList.add("show");return}
-  if(e.target.closest("[data-close-modal]")){document.getElementById("modal").classList.remove("show");return}
-});
-document.getElementById("entryBack").addEventListener("click",()=>{entryOrigin==="master"?go("master"):go("characters")});
-document.getElementById("masterShortcut").addEventListener("click",()=>openMaster(currentName,currentCategory));
-document.getElementById("prevEntry").addEventListener("click",()=>navigateEntry(-1));
-document.getElementById("nextEntry").addEventListener("click",()=>navigateEntry(1));
-
-const zoomModal=document.getElementById("zoomModal"),zoomImg=document.getElementById("zoomImg"),zoomCanvas=zoomModal.querySelector(".zoomCanvas");
-let zoomScale=1,zoomX=0,zoomY=0,zoomPointers=new Map(),pinchStart=0,pinchScale=1,dragStart=null;
-function applyZoom(){zoomImg.style.transform='translate('+zoomX+'px,'+zoomY+'px) scale('+zoomScale+')'}
-function setZoom(v){zoomScale=Math.max(1,Math.min(5,v));if(zoomScale===1){zoomX=0;zoomY=0}applyZoom()}
-function openZoom(src,alt){zoomImg.src=src;zoomImg.alt=alt||"";zoomScale=1;zoomX=0;zoomY=0;applyZoom();zoomModal.classList.add("show");zoomModal.setAttribute("aria-hidden","false")}
-function closeZoom(){zoomModal.classList.remove("show");zoomModal.setAttribute("aria-hidden","true");zoomPointers.clear();dragStart=null;zoomImg.src=""}
-document.getElementById("generatedSpread").addEventListener("click",e=>{const img=e.target.closest("img");if(img)openZoom(img.currentSrc||img.src,img.alt)});
-document.getElementById("zoomClose").addEventListener("click",closeZoom);
-document.getElementById("zoomIn").addEventListener("click",()=>setZoom(zoomScale+.5));
-document.getElementById("zoomOut").addEventListener("click",()=>setZoom(zoomScale-.5));
-document.getElementById("zoomReset").addEventListener("click",()=>setZoom(1));
-zoomCanvas.addEventListener("dblclick",e=>{e.preventDefault();setZoom(zoomScale>1?1:2)});
-zoomCanvas.addEventListener("wheel",e=>{e.preventDefault();setZoom(zoomScale+(e.deltaY<0?.35:-.35))},{passive:false});
-zoomCanvas.addEventListener("pointerdown",e=>{zoomCanvas.setPointerCapture(e.pointerId);zoomPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(zoomPointers.size===1&&zoomScale>1){dragStart={x:e.clientX-zoomX,y:e.clientY-zoomY};zoomImg.classList.add("dragging")}if(zoomPointers.size===2){const p=[...zoomPointers.values()];pinchStart=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);pinchScale=zoomScale}});
-zoomCanvas.addEventListener("pointermove",e=>{if(!zoomPointers.has(e.pointerId))return;zoomPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(zoomPointers.size===2){const p=[...zoomPointers.values()],d=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);if(pinchStart)setZoom(pinchScale*d/pinchStart)}else if(zoomPointers.size===1&&dragStart&&zoomScale>1){zoomX=e.clientX-dragStart.x;zoomY=e.clientY-dragStart.y;applyZoom()}});
-function endZoomPointer(e){zoomPointers.delete(e.pointerId);if(zoomPointers.size<2)pinchStart=0;if(zoomPointers.size===0){dragStart=null;zoomImg.classList.remove("dragging")}}
-zoomCanvas.addEventListener("pointerup",endZoomPointer);zoomCanvas.addEventListener("pointercancel",endZoomPointer);
-zoomModal.addEventListener("click",e=>{if(e.target===zoomModal)closeZoom()});
-
-document.addEventListener("input",e=>{if(e.target.id==="catalogSearch")renderCatalog("All")});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&zoomModal.classList.contains("show")){closeZoom();return}if(e.key==="Enter"&&e.target.matches("[data-go-on-enter]")){go(e.target.dataset.goOnEnter);return}if(document.getElementById("entry").classList.contains("active")&&!zoomModal.classList.contains("show")){if(e.key==="ArrowLeft")navigateEntry(-1);if(e.key==="ArrowRight")navigateEntry(1)}});
-
-
-openBook(1);
-const deepEntry=new URLSearchParams(location.search).get("entry");
-if(deepEntry&&deepEntry.toLowerCase()==="carl"){
-  currentBook=1;currentCategory="Main cast";currentName="Carl";entryOrigin="book";openEntry("I");
-}else{
-  go("library");
-}
-</script>
-</body>
-</html><script async data-explicit-opt-in="true" data-deployment-id="dpl_2jpH3uXtPReupjk6beDvKADtrGjE" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
+const $=s=>document.querySelector(s),stage=$('#stage'),viewer=$('#viewer');
+const cats=[...new Set(ITEMS.map(x=>x.category))];const available=ITEMS.map((it,i)=>it.asset?i:null).filter(i=>i!==null);
+let index=0,spreadLeaf=0,scale=1,panX=0,panY=0,startDist=0,startScale=1,lastX=0,lastY=0,gesture='none',swipeStartX=0,swipeStartY=0;
+const isDouble=it=>!!it.asset&&DOUBLES.has(it.slug);
+const useLeafMode=it=>isDouble(it)&&matchMedia('(max-width:700px) and (orientation:portrait)').matches;
+function assetFor(it){return useLeafMode(it)?DOUBLE_PAGES[it.slug][spreadLeaf]:it.asset}
+function resetZoom(){scale=1;panX=panY=0;applyZoom()}function applyZoom(){stage.style.transform=`translate(${panX}px,${panY}px) scale(${scale})`}
+function clampPan(){if(scale<=1){panX=panY=0;return}const a=stage.getBoundingClientRect(),v=viewer.getBoundingClientRect();const maxX=Math.max(0,(a.width-v.width)/2/scale+v.width*(scale-1)*.18),maxY=Math.max(0,(a.height-v.height)/2/scale+v.height*(scale-1)*.18);panX=Math.max(-maxX,Math.min(maxX,panX));panY=Math.max(-maxY,Math.min(maxY,panY))}
+function render(){const it=ITEMS[index];resetZoom();const leaf=useLeafMode(it);viewer.classList.toggle('spread',isDouble(it));viewer.classList.toggle('leaf',leaf);const src=it.asset?assetFor(it):null;stage.innerHTML=src?`<img class="art ${leaf?'spreadLeaf':(isDouble(it)?'double':'single')}" src="${src}" alt="${it.name}">`:`<div class="placeholder"><div><b>${it.name}</b><span>Artwork pending.</span></div></div>`;$('#name').textContent=it.name;const pos=available.indexOf(index);$('#count').textContent=it.asset?(leaf?`${spreadLeaf+1} / 2 · ${CAT_LABEL[it.category]||it.category}`:`${pos+1} of ${available.length} · ${CAT_LABEL[it.category]||it.category}`):`Pending · ${CAT_LABEL[it.category]||it.category}`;$('#prev').disabled=(leaf&&spreadLeaf>0)?false:previousAvailable(index)<0;$('#next').disabled=(leaf&&spreadLeaf<1)?false:nextAvailable(index)<0;const hint=document.querySelector('.spreadHint');if(hint)hint.textContent=leaf?'PAGE '+(spreadLeaf+1)+' OF 2 · SWIPE TO TURN':'OPEN SPREAD · PINCH TO INSPECT';updateActive();preload();history.replaceState(null,'',`?entry=${encodeURIComponent(it.slug)}`)}
+function previousAvailable(from){for(let i=from-1;i>=0;i--)if(ITEMS[i].asset)return i;return-1}function nextAvailable(from){for(let i=from+1;i<ITEMS.length;i++)if(ITEMS[i].asset)return i;return-1}
+function prev(){const it=ITEMS[index];if(useLeafMode(it)&&spreadLeaf>0){spreadLeaf--;render();return}const i=previousAvailable(index);if(i>=0){index=i;spreadLeaf=useLeafMode(ITEMS[index])?1:0;render()}}
+function next(){const it=ITEMS[index];if(useLeafMode(it)&&spreadLeaf<1){spreadLeaf++;render();return}const i=nextAvailable(index);if(i>=0){index=i;spreadLeaf=0;render()}}
+function go(i){if(i<0||i>=ITEMS.length)return;index=i;spreadLeaf=0;render()}
+function preload(){const it=ITEMS[index];if(useLeafMode(it)){for(const a of DOUBLE_PAGES[it.slug]){const im=new Image();im.src=a}}for(const i of [previousAvailable(index),nextAvailable(index)]){const a=ITEMS[i]?.asset;if(a){const im=new Image();im.src=a}}}
+function renderContents(){$('#catRail').innerHTML=`<button class="cat active" data-filter="all">All</button>`+cats.map(c=>`<button class="cat" data-filter="${c}">${CAT_LABEL[c]||c}</button>`).join('');let h='';for(const c of cats){h+=`<section class="section" data-section="${c}"><div class="sectionHead"><h3>${CAT_LABEL[c]||c}</h3><div class="rule"></div></div><div class="grid">`;ITEMS.forEach((it,i)=>{if(it.category!==c)return;const thumb=it.asset?`<div class="entryThumb"><img src="${it.asset}" alt="" loading="lazy"></div>`:'';h+=`<button class="entry ${isDouble(it)?'double':''} ${it.asset?'':'missing'}" data-index="${i}">${thumb}${isDouble(it)&&it.asset?'<span class="entryPageBadge">2-page</span>':''}<div class="entryName">${it.name}</div><div class="entryType">${it.asset?(isDouble(it)?'Illustrated spread':'Dossier page'):'Artwork pending'}</div></button>`});h+='</div></section>'}$('#catalogue').innerHTML=h;updateActive()}
+function updateActive(){document.querySelectorAll('.entry').forEach(b=>b.classList.toggle('active',Number(b.dataset.index)===index))}
+function openContents(){$('#contents').classList.add('open');$('#contentsBackdrop').classList.add('open')}function closeContents(){$('#contents').classList.remove('open');$('#contentsBackdrop').classList.remove('open')}
+function filterCat(cat){document.querySelectorAll('.cat').forEach(b=>b.classList.toggle('active',b.dataset.filter===cat));document.querySelectorAll('.section').forEach(s=>s.style.display=(cat==='all'||s.dataset.section===cat)?'block':'none')}
+function openSearch(){$('#searchWrap').classList.add('open');$('#search').focus();runSearch($('#search').value)}function closeSearch(){$('#searchWrap').classList.remove('open');$('#results').classList.remove('open');$('#search').value=''}
+function runSearch(q){q=q.trim().toLowerCase();if(!q){$('#results').classList.remove('open');return}const matches=ITEMS.map((it,i)=>({...it,i})).filter(it=>(it.name+' '+it.category).toLowerCase().includes(q));$('#results').innerHTML=matches.map(it=>`<button class="result" data-index="${it.i}"><b>${it.name}</b><small>${CAT_LABEL[it.category]||it.category}${it.asset?'':' · artwork pending'}</small></button>`).join('')||'<div class="result">No match.</div>';$('#results').classList.add('open')}
+renderContents();
+document.body.addEventListener('click',e=>{const ix=e.target.closest?.('[data-index]');if(ix){go(Number(ix.dataset.index));closeContents();closeSearch();return}const f=e.target.closest?.('[data-filter]');if(f)filterCat(f.dataset.filter)});
+$('#contentsBtn').onclick=openContents;$('#contentsClose').onclick=closeContents;$('#contentsBackdrop').onclick=closeContents;$('#searchBtn').onclick=openSearch;$('#searchClose').onclick=closeSearch;$('#search').oninput=e=>runSearch(e.target.value);$('#prev').onclick=prev;$('#next').onclick=next;$('#hitLeft').onclick=()=>{if(scale<=1.02)prev()};$('#hitRight').onclick=()=>{if(scale<=1.02)next()};
+viewer.addEventListener('wheel',e=>{if(!e.ctrlKey)return;e.preventDefault();scale=Math.max(1,Math.min(4,scale*(e.deltaY<0?1.12:.89)));clampPan();applyZoom()},{passive:false});
+viewer.addEventListener('dblclick',e=>{e.preventDefault();scale=scale>1.05?1:2;panX=panY=0;applyZoom()});
+viewer.addEventListener('touchstart',e=>{if(e.touches.length===2){gesture='pinch';startDist=dist(e.touches[0],e.touches[1]);startScale=scale;e.preventDefault()}else if(e.touches.length===1){gesture='single';lastX=swipeStartX=e.touches[0].clientX;lastY=swipeStartY=e.touches[0].clientY}},{passive:false});
+viewer.addEventListener('touchmove',e=>{if(gesture==='pinch'&&e.touches.length===2){e.preventDefault();scale=Math.max(1,Math.min(4,startScale*dist(e.touches[0],e.touches[1])/startDist));clampPan();applyZoom()}else if(gesture==='single'&&e.touches.length===1&&scale>1.02){e.preventDefault();const x=e.touches[0].clientX,y=e.touches[0].clientY;panX+=x-lastX;panY+=y-lastY;lastX=x;lastY=y;clampPan();applyZoom()}},{passive:false});
+viewer.addEventListener('touchend',e=>{if(gesture==='single'&&scale<=1.02&&e.changedTouches[0]){const dx=e.changedTouches[0].clientX-swipeStartX,dy=e.changedTouches[0].clientY-swipeStartY;if(Math.abs(dx)>58&&Math.abs(dx)>Math.abs(dy)*1.35)(dx<0?next:prev)()}gesture='none'},{passive:true});
+function dist(a,b){return Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)}
+addEventListener('orientationchange',()=>{spreadLeaf=0;setTimeout(render,120)});
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')prev();else if(e.key==='ArrowRight')next();else if(e.key==='Escape'){closeContents();closeSearch()}});
+const q=new URLSearchParams(location.search).get('entry');if(q){const i=ITEMS.findIndex(x=>x.slug===q);if(i>=0)index=i}render();
+</script></body></html>
