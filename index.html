@@ -358,6 +358,17 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
     content:""!important
   }
 }
+
+@media(max-width:950px){
+  /* No-crop asset alignment: keep meaningful artwork flush to the reading start.
+     Any unavoidable ratio slack belongs after the content, never before it. */
+  #entry .generatedSpread:not(.singleImage){
+    justify-content:flex-start!important
+  }
+  #entry .generatedSpread.singleImage img{
+    object-position:left center!important
+  }
+}
 </style>
 </head>
 <body>
