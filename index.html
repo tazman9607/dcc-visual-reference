@@ -185,7 +185,62 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
   }
   #entry .generatedWrap.singleImage .generatedGutter{display:none!important}
 }
-</style>
+
+@media(max-width:950px){
+  #entry .characterEdgeNav{
+    order:2!important;
+    position:relative!important;
+    width:calc(100vw - 28px)!important;
+    height:48px!important;
+    margin:-1px auto 0!important;
+    display:flex!important;
+    align-items:flex-start!important;
+    justify-content:space-between!important;
+    border:0!important;
+    background:transparent!important;
+    pointer-events:none!important;
+    overflow:visible!important;
+    z-index:6!important
+  }
+  #entry .characterEdgeNav button{
+    pointer-events:auto!important;
+    position:relative!important;
+    width:min(43%,190px)!important;
+    min-height:44px!important;
+    padding:7px 12px 8px!important;
+    border:1px solid #644936!important;
+    border-top:0!important;
+    background:linear-gradient(#2b1c14,#1a110c)!important;
+    color:#ead5b4!important;
+    box-shadow:0 5px 10px #0005!important;
+    border-radius:0!important;
+    clip-path:polygon(0 0,100% 0,94% 100%,6% 100%)!important;
+    writing-mode:horizontal-tb!important;
+    text-orientation:mixed!important;
+    transform:none!important;
+    font-family:Georgia,serif!important
+  }
+  #entry .characterEdgeNav .edgePrev{text-align:left!important;margin-left:7px!important}
+  #entry .characterEdgeNav .edgeNext{text-align:right!important;margin-right:7px!important}
+  #entry .characterEdgeNav .navDir{
+    display:block;
+    font:700 7px Arial,sans-serif;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+    color:#9f876a;
+    margin-bottom:2px
+  }
+  #entry .characterEdgeNav .navName{
+    display:block;
+    font:700 13px/1.05 Georgia,serif;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap
+  }
+  #entry .characterEdgeNav .edgePrev .navName:before{content:"‹ ";color:#a33f35}
+  #entry .characterEdgeNav .edgeNext .navName:after{content:" ›";color:#a33f35}
+  #entry .characterEdgeNav button:disabled{visibility:hidden!important}
+}</style>
 </head>
 <body>
 <div class="app">
@@ -236,8 +291,12 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
 <section id="entry" class="view"><div class="stage"><button class="back" id="entryBack">← SECTION</button>
 
 <div class="characterEdgeNav" id="characterNav">
-  <button id="prevCharacter" class="edgePrev" type="button" aria-label="Previous character"></button>
-  <button id="nextCharacter" class="edgeNext" type="button" aria-label="Next character"></button>
+  <button id="prevCharacter" class="edgePrev" type="button" aria-label="Previous character">
+    <span class="navDir">Previous</span><span class="navName"></span>
+  </button>
+  <button id="nextCharacter" class="edgeNext" type="button" aria-label="Next character">
+    <span class="navDir">Next</span><span class="navName"></span>
+  </button>
 </div>
 <div id="zoomViewport" class="zoomViewport"><div id="generatedEntry" class="generatedWrap" style="display:none"><div class="generatedSpread"><img src="/assets/carl-book1-left.webp" alt="Carl Book I left page"><img src="/assets/carl-book1-right.webp" alt="Carl Book I right page"></div><div class="generatedGutter"></div></div></div>
 <div id="placeholderEntry" class="placeholderSpread" style="display:none"></div>
@@ -357,7 +416,7 @@ function fitCanonicalBooks(){
   }
 }
 function categoryNames(){return dataForBook()[currentCategory]||[]}
-function updateCharacterNav(){const arr=categoryNames(),i=arr.indexOf(currentName),prev=document.getElementById("prevCharacter"),next=document.getElementById("nextCharacter");prev.disabled=i<=0;next.disabled=i<0||i>=arr.length-1;const prevName=i>0?arr[i-1]:"Start",nextName=i>=0&&i<arr.length-1?arr[i+1]:"End";prev.textContent=i>0?"← "+prevName:"← Start";next.textContent=i>=0&&i<arr.length-1?nextName+" →":"End →";prev.setAttribute("aria-label","Previous character: "+prevName);next.setAttribute("aria-label","Next character: "+nextName);prev.title=prevName;next.title=nextName}
+function updateCharacterNav(){const arr=categoryNames(),i=arr.indexOf(currentName),prev=document.getElementById("prevCharacter"),next=document.getElementById("nextCharacter"),prevName=i>0?arr[i-1]:"",nextName=i>=0&&i<arr.length-1?arr[i+1]:"";prev.disabled=!prevName;next.disabled=!nextName;prev.querySelector(".navName").textContent=prevName;next.querySelector(".navName").textContent=nextName;prev.setAttribute("aria-label",prevName?"Previous character: "+prevName:"No previous character");next.setAttribute("aria-label",nextName?"Next character: "+nextName:"No next character");prev.title=prevName;next.title=nextName}
 function moveCharacter(dir){const arr=categoryNames(),i=arr.indexOf(currentName),n=i+dir;if(n<0||n>=arr.length)return;currentName=arr[n];openEntry(BOOKS[currentBook].roman)}
 function clampPan(){const vp=document.getElementById("zoomViewport"),el=document.getElementById("generatedEntry");if(!vp||!el)return;const fit=Number(el.dataset.fitScale||1),vw=vp.clientWidth,vh=vp.clientHeight,ew=el.offsetWidth*fit*zoomScale,eh=el.offsetHeight*fit*zoomScale;const minX=Math.min(0,vw-ew),minY=Math.min(0,vh-eh);zoomX=Math.max(minX,Math.min(0,zoomX));zoomY=Math.max(minY,Math.min(0,zoomY))}
 function applyZoom(){clampPan();const el=document.getElementById("generatedEntry");if(!el)return;const fit=Number(el.dataset.fitScale||1);el.style.transform="translate3d("+zoomX+"px,"+zoomY+"px,0) scale("+(fit*zoomScale)+")";el.style.transformOrigin="top left"}
