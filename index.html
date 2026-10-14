@@ -57,42 +57,84 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
 .mobileNav{display:none}
 @media(max-width:950px){.mobileNav{display:grid}}
 @media(max-width:950px){
-  /* True mobile contents page: one readable leaf, not a clipped desktop spread */
-  #book .stage{padding:42px 10px 8px;overflow:visible}
-  #book .folio{
-    display:block!important;
+  /* Mobile book pages: preserve the open-book theme while prioritising the readable right leaf */
+  #book .stage,#characters .stage{padding:42px 8px 8px;overflow:visible}
+
+  #book .folio,#characters .folio{
+    display:grid!important;
+    grid-template-columns:27% 73%!important;
     position:relative!important;
     left:auto!important;
     transform:none!important;
     width:100%!important;
     height:auto!important;
     min-height:0!important;
-    max-width:590px!important;
+    max-width:680px!important;
     margin:0 auto!important;
     filter:drop-shadow(0 16px 24px #0007)
   }
-  #book .leaf.left{display:none!important}
-  #book .leaf.right{
+
+  #book .leaf,#characters .leaf{
     display:block!important;
     width:100%!important;
     height:auto!important;
     min-height:0!important;
-    border-radius:8px!important;
+    overflow:hidden
+  }
+
+  #book .leaf.left,#characters .leaf.left{
+    min-height:calc(min(72vh,700px));
+    border-radius:8px 0 0 8px!important;
+    background:
+      repeating-linear-gradient(0deg,transparent 0 30px,#5b432a08 31px),
+      linear-gradient(100deg,var(--paper),var(--paper2))!important
+  }
+
+  #book .leaf.right,#characters .leaf.right{
+    min-height:calc(min(72vh,700px));
+    border-radius:0 8px 8px 0!important;
     overflow:visible
   }
-  #book .gutter{display:none!important}
+
+  #book .gutter,#characters .gutter{
+    display:block!important;
+    left:27%!important;
+    top:8px!important;
+    bottom:8px!important;
+    width:10px!important;
+    background:linear-gradient(90deg,transparent,#0002,#fff1,transparent)!important
+  }
+
+  /* Contents: blank decorative left leaf, readable right leaf */
+  #book .contentsL{display:none!important}
   #book .contentsR{
     height:auto!important;
-    min-height:0!important;
-    padding:22px 20px 24px!important
+    min-height:calc(min(72vh,700px))!important;
+    padding:20px 18px 22px!important
   }
-  #book .booktitle{font-size:clamp(34px,10vw,48px)!important}
-  #book .intro{font-size:14px!important;line-height:1.45}
-  #book .toc-row{padding:13px 0!important;min-height:44px}
-  #book .toc-row b{font-size:18px!important}
+  #book .booktitle{font-size:clamp(30px,8vw,44px)!important}
+  #book .intro{font-size:13px!important;line-height:1.42}
+  #book .toc-row{padding:11px 0!important;min-height:42px}
+  #book .toc-row b{font-size:17px!important}
   #book .toc-row span,#book .toc-row em{font-size:10px}
 
-  /* Character reader should occupy the useful phone viewport */
+  /* Category index: same open-book geometry, content occupies the right leaf cleanly */
+  #characters .categoryBlank{
+    display:block!important;
+    min-height:calc(min(72vh,700px))!important
+  }
+  #characters .catpage{
+    height:auto!important;
+    min-height:calc(min(72vh,700px))!important;
+    padding:18px 16px 20px!important
+  }
+  #characters .catpage h1{font-size:clamp(30px,8vw,42px)!important;margin:8px 0!important}
+  #characters .catpage p{font-size:12px!important;line-height:1.35;margin:8px 0 12px}
+  #characters .indexlist{margin-top:10px!important}
+  #characters .indexrow{min-height:46px!important;padding:11px 0!important;grid-template-columns:26px 1fr!important}
+  #characters .indexname{font-size:clamp(16px,4.5vw,22px)!important}
+
+  /* Character reader uses the useful screen height */
   #entry .stage{
     padding:42px 0 0!important;
     min-height:calc(100dvh - 58px - 72px)!important;
@@ -117,6 +159,22 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
     margin:4px auto 0!important
   }
   #entry .characterEdgeNav button{min-height:36px!important}
+
+  /* Old two-image character spreads: never show a hard black canyon between leaves */
+  #entry .generatedSpread{
+    background:linear-gradient(90deg,#1b120d 0,#2a1b12 48%,#2a1b12 52%,#1b120d 100%)!important
+  }
+  #entry .generatedSpread:not(.singleImage) img{
+    background:#21160f!important
+  }
+  #entry .generatedWrap:not(.singleImage) .generatedGutter{
+    display:block!important;
+    width:8px!important;
+    top:0!important;
+    bottom:0!important;
+    background:linear-gradient(90deg,transparent,#0002,#fff1,transparent)!important
+  }
+  #entry .generatedWrap.singleImage .generatedGutter{display:none!important}
 }
 </style>
 </head>
@@ -220,7 +278,7 @@ const views=[...document.querySelectorAll(".view")];
 
 function go(id){views.forEach(v=>v.classList.toggle("active",v.id===id));requestAnimationFrame(fitCanonicalBooks);const navId=["book","characters","entry","master"].includes(id)?"book":id;document.querySelectorAll(".mobileNav button").forEach(b=>{const active=b.dataset.go===navId;b.classList.toggle("active",active);if(active)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});window.scrollTo(0,0);if(id==="search")renderCatalog("All")}
 function openBook(n){currentBook=Number(n);const b=BOOKS[currentBook];document.getElementById("volumeKicker").textContent="VOLUME "+b.roman+" · VISUAL ARCHIVE COPY";document.getElementById("bookKicker").textContent="BOOK "+b.roman+" · ARCHIVE CONTENTS";document.getElementById("bookTitle").textContent=b.title;document.getElementById("bookCover").src=b.cover;go("book")}
-function renderCategory(name){currentCategory=name;const arr=dataForBook()[name]||[],meta=META[name];const make=(items,offset)=>'<div class="indexlist">'+items.map((n,i)=>'<button class="indexrow" data-book-person="'+n.replaceAll('"','&quot;')+'" data-person-category="'+name+'"><span class="indexnum">'+String(offset+i+1).padStart(2,"0")+'</span><span class="indexname">'+n+'</span><span class="indexmeta">Book '+BOOKS[currentBook].roman+' reference</span></button>').join("")+'</div>';const folio=document.getElementById("categoryFolio");folio.classList.remove("singleCategory");if(arr.length<=8){folio.innerHTML='<section class="leaf left categoryBlank" aria-hidden="true"></section><section class="leaf right"><div class="catpage"><div class="kicker">SECTION '+meta[0]+' · BOOK '+BOOKS[currentBook].roman+' ARCHIVE</div><h1>'+name+'</h1><div class="redrule"></div><p>'+meta[1]+'</p>'+make(arr,0)+'</div></section><div class="gutter"></div>'}else{const cut=Math.ceil(arr.length/2);folio.innerHTML='<section class="leaf left"><div class="catpage"><div class="kicker">SECTION '+meta[0]+' · BOOK '+BOOKS[currentBook].roman+' ARCHIVE</div><h1>'+name+'</h1><div class="redrule"></div><p>'+meta[1]+'</p>'+make(arr.slice(0,cut),0)+'</div></section><section class="leaf right"><div class="catpage"><div class="kicker">SECTION '+meta[0]+' · CONTINUED</div>'+make(arr.slice(cut),cut)+'</div></section><div class="gutter"></div>'}go("characters")}
+function renderCategory(name){currentCategory=name;const arr=dataForBook()[name]||[],meta=META[name];const make=(items,offset)=>'<div class="indexlist">'+items.map((n,i)=>'<button class="indexrow" data-book-person="'+n.replaceAll('"','&quot;')+'" data-person-category="'+name+'"><span class="indexnum">'+String(offset+i+1).padStart(2,"0")+'</span><span class="indexname">'+n+'</span><span class="indexmeta">Book '+BOOKS[currentBook].roman+' reference</span></button>').join("")+'</div>';const folio=document.getElementById("categoryFolio");folio.classList.remove("singleCategory");if(arr.length<=8){folio.innerHTML='<section class="leaf left categoryBlank" aria-hidden="true"></section><section class="leaf right"><div class="catpage"><div class="kicker">SECTION '+meta[0]+' · BOOK '+BOOKS[currentBook].roman+' ARCHIVE</div><h1>'+name+'</h1><div class="redrule"></div><p>'+meta[1]+'</p>'+make(arr,0)+'</div></section><div class="gutter"></div>'}else{const cut=Math.ceil(arr.length/2);folio.innerHTML='<section class="leaf left categoryLongLeft"><div class="catpage"><div class="kicker">SECTION '+meta[0]+' · BOOK '+BOOKS[currentBook].roman+' ARCHIVE</div><h1>'+name+'</h1><div class="redrule"></div><p>'+meta[1]+'</p>'+make(arr.slice(0,cut),0)+'</div></section><section class="leaf right"><div class="catpage"><div class="kicker">SECTION '+meta[0]+' · CONTINUED</div>'+make(arr.slice(cut),cut)+'</div></section><div class="gutter"></div>'}go("characters")}
 function openBookPerson(name,cat){currentName=name;currentCategory=cat;entryOrigin="book";openEntry(BOOKS[currentBook].roman)}
 function openMaster(name,cat){currentName=name;currentCategory=cat;document.getElementById("masterName").textContent=name;document.getElementById("masterCategory").textContent=cat;go("master")}
 function openEntry(roman){
@@ -255,7 +313,7 @@ function fitCanonicalBooks(){
     el.style.transform="";
     el.style.left="";
     el.style.marginBottom="";
-    if(!mobile || el.closest("#book"))return;
+    if(!mobile || el.closest("#book") || el.closest("#characters"))return;
     const scale=Math.min(1,(window.innerWidth-8)/1180);
     el.style.transform="scale("+scale+")";
     el.style.marginBottom=((680*scale)-680)+"px";
