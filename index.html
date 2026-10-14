@@ -56,6 +56,68 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
 }
 .mobileNav{display:none}
 @media(max-width:950px){.mobileNav{display:grid}}
+@media(max-width:950px){
+  /* True mobile contents page: one readable leaf, not a clipped desktop spread */
+  #book .stage{padding:42px 10px 8px;overflow:visible}
+  #book .folio{
+    display:block!important;
+    position:relative!important;
+    left:auto!important;
+    transform:none!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-width:590px!important;
+    margin:0 auto!important;
+    filter:drop-shadow(0 16px 24px #0007)
+  }
+  #book .leaf.left{display:none!important}
+  #book .leaf.right{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    border-radius:8px!important;
+    overflow:visible
+  }
+  #book .gutter{display:none!important}
+  #book .contentsR{
+    height:auto!important;
+    min-height:0!important;
+    padding:22px 20px 24px!important
+  }
+  #book .booktitle{font-size:clamp(34px,10vw,48px)!important}
+  #book .intro{font-size:14px!important;line-height:1.45}
+  #book .toc-row{padding:13px 0!important;min-height:44px}
+  #book .toc-row b{font-size:18px!important}
+  #book .toc-row span,#book .toc-row em{font-size:10px}
+
+  /* Character reader should occupy the useful phone viewport */
+  #entry .stage{
+    padding:42px 0 0!important;
+    min-height:calc(100dvh - 58px - 72px)!important;
+    display:flex!important;
+    flex-direction:column!important;
+    overflow:hidden!important
+  }
+  #entry .zoomViewport{
+    order:1;
+    width:calc(100vw - 8px)!important;
+    height:calc(100dvh - 58px - 72px - 42px - 40px)!important;
+    min-height:360px!important;
+    max-height:none!important;
+    margin:0 auto!important;
+    background:#090604;
+    border-radius:6px!important
+  }
+  #entry .characterEdgeNav{
+    order:2;
+    flex:0 0 36px;
+    width:calc(100vw - 20px)!important;
+    margin:4px auto 0!important
+  }
+  #entry .characterEdgeNav button{min-height:36px!important}
+}
 </style>
 </head>
 <body>
@@ -186,44 +248,39 @@ function openEntry(roman){
 }
 function renderCatalog(filter){const q=(document.getElementById("catalogSearch")?.value||"").toLowerCase();let rows=[];for(const [cat,names] of Object.entries(DATA)){if(filter!=="All"&&filter!==cat)continue;for(const name of names)rows.push({cat,name})}if(q)rows=rows.filter(x=>x.name.toLowerCase().includes(q)||x.cat.toLowerCase().includes(q));document.getElementById("results").innerHTML=rows.slice(0,8).map(x=>'<button class="card" data-search-person="'+x.name.replaceAll('"','&quot;')+'" data-person-category="'+x.cat+'"><small>'+x.cat+'</small><strong>'+x.name+'</strong><span>Global identity record</span></button>').join("")||'<p style="color:#6d5942;font-family:Georgia,serif">No unlocked record matches.</p>'}
 let zoomScale=1,zoomX=0,zoomY=0,lastTap=0,touchStart=null,pinchStart=null;
-function mobileEntryDefaultZoom(){return window.matchMedia("(max-width:950px)").matches?1.28:1}
+function mobileEntryDefaultZoom(){if(!window.matchMedia("(max-width:950px)").matches)return 1;const fit=Math.min(1,(window.innerWidth-8)/1180),availableH=Math.max(360,window.innerHeight-58-72-42-40);return Math.max(1.28,availableH/(680*fit))}
 function fitCanonicalBooks(){
   const mobile=window.matchMedia("(max-width:950px)").matches;
   document.querySelectorAll(".folio").forEach(el=>{
     el.style.transform="";
     el.style.left="";
     el.style.marginBottom="";
-    if(!mobile)return;
-    const vw=Math.max(1,window.innerWidth);
-    const isContents=el.closest("#book");
-    let scale,offsetX=0;
-    if(isContents){
-      scale=Math.min(1,(vw-24)/590);
-      offsetX=12-(590*scale);
-    }else{
-      scale=Math.min(1,(vw-8)/1180);
-    }
+    if(!mobile || el.closest("#book"))return;
+    const scale=Math.min(1,(window.innerWidth-8)/1180);
     el.style.transform="scale("+scale+")";
-    el.style.left=offsetX+"px";
     el.style.marginBottom=((680*scale)-680)+"px";
   });
+
   const vp=document.getElementById("zoomViewport");
   const wrap=document.getElementById("generatedEntry");
   if(mobile&&vp&&wrap){
-    const scale=Math.min(1,(window.innerWidth-8)/1180);
-    const readerZoom=Math.max(1,zoomScale);
-    const visibleH=Math.min(window.innerHeight*0.58,680*scale*readerZoom);
-    vp.style.width=(1180*scale)+"px";
-    vp.style.height=visibleH+"px";
-    vp.style.minHeight=visibleH+"px";
-    vp.style.maxHeight=visibleH+"px";
-    wrap.dataset.fitScale=String(scale);
-    if(zoomScale<=1.02){
-      zoomX=0;zoomY=0;
-      wrap.style.transform="translate3d(0,0,0) scale("+scale+")";
-      wrap.style.transformOrigin="top left";
+    const fit=Math.min(1,(window.innerWidth-8)/1180);
+    const availableH=Math.max(360,window.innerHeight-58-72-42-40);
+    vp.style.width=(window.innerWidth-8)+"px";
+    vp.style.height=availableH+"px";
+    vp.style.minHeight=availableH+"px";
+    vp.style.maxHeight=availableH+"px";
+    wrap.dataset.fitScale=String(fit);
+
+    const minZoom=Math.max(1.28,availableH/(680*fit));
+    if(!Number.isFinite(zoomScale)||zoomScale<minZoom){
+      zoomScale=minZoom;
+      zoomY=0;
     }
-  } else if(vp&&wrap){
+    const renderedW=1180*fit*zoomScale;
+    zoomX=(vp.clientWidth-renderedW)/2;
+    applyZoom();
+  }else if(vp&&wrap){
     vp.style.width="";
     vp.style.height="";
     vp.style.minHeight="";
@@ -236,7 +293,7 @@ function updateCharacterNav(){const arr=categoryNames(),i=arr.indexOf(currentNam
 function moveCharacter(dir){const arr=categoryNames(),i=arr.indexOf(currentName),n=i+dir;if(n<0||n>=arr.length)return;currentName=arr[n];openEntry(BOOKS[currentBook].roman)}
 function clampPan(){const vp=document.getElementById("zoomViewport"),el=document.getElementById("generatedEntry");if(!vp||!el)return;const fit=Number(el.dataset.fitScale||1),vw=vp.clientWidth,vh=vp.clientHeight,ew=el.offsetWidth*fit*zoomScale,eh=el.offsetHeight*fit*zoomScale;const minX=Math.min(0,vw-ew),minY=Math.min(0,vh-eh);zoomX=Math.max(minX,Math.min(0,zoomX));zoomY=Math.max(minY,Math.min(0,zoomY))}
 function applyZoom(){clampPan();const el=document.getElementById("generatedEntry");if(!el)return;const fit=Number(el.dataset.fitScale||1);el.style.transform="translate3d("+zoomX+"px,"+zoomY+"px,0) scale("+(fit*zoomScale)+")";el.style.transformOrigin="top left"}
-function resetZoom(){zoomScale=mobileEntryDefaultZoom();zoomX=0;zoomY=0;const vp=document.getElementById("zoomViewport"),el=document.getElementById("generatedEntry"),fit=Number(el?.dataset.fitScale||1);if(vp&&el&&zoomScale>1.01){const vw=vp.clientWidth,ew=el.offsetWidth*fit*zoomScale;zoomX=(vw-ew)/2}applyZoom();requestAnimationFrame(fitCanonicalBooks)}
+function resetZoom(){zoomScale=mobileEntryDefaultZoom();zoomX=0;zoomY=0;const vp=document.getElementById("zoomViewport"),el=document.getElementById("generatedEntry"),fit=Number(el?.dataset.fitScale||1);if(vp&&el&&zoomScale>1.01){const vw=vp.clientWidth,ew=el.offsetWidth*fit*zoomScale;zoomX=(vw-ew)/2}applyZoom()}
 function toggleZoom(clientX,clientY){const base=mobileEntryDefaultZoom();if(zoomScale>base+0.15){resetZoom();return}const vp=document.getElementById("zoomViewport"),r=vp.getBoundingClientRect();const fit=Number(document.getElementById("generatedEntry")?.dataset.fitScale||1),localX=clientX-r.left,localY=clientY-r.top;zoomScale=Math.min(2.2,base*1.55);zoomX=localX-(localX/(fit*base))*fit*zoomScale;zoomY=localY-(localY/(fit*base))*fit*zoomScale;applyZoom();requestAnimationFrame(fitCanonicalBooks)}
 function distance(a,b){return Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)}
 function midpoint(a,b){return{x:(a.clientX+b.clientX)/2,y:(a.clientY+b.clientY)/2}}
