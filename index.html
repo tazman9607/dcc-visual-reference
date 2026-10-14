@@ -58,19 +58,20 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
 @media(max-width:950px){.mobileNav{display:grid}}
 @media(max-width:950px){
   /* Mobile book pages: preserve the open-book theme while prioritising the readable right leaf */
-  #book .stage,#characters .stage{padding:42px 8px 8px;overflow:visible}
+  #book .stage,#characters .stage{padding:42px 8px 8px;overflow-x:auto;overflow-y:visible;scrollbar-width:none;overscroll-behavior-x:contain}
+  #book .stage::-webkit-scrollbar,#characters .stage::-webkit-scrollbar{display:none}
 
   #book .folio,#characters .folio{
     display:grid!important;
-    grid-template-columns:38% 62%!important;
+    grid-template-columns:1fr 1fr!important;
     position:relative!important;
     left:auto!important;
     transform:none!important;
-    width:100%!important;
+    width:170vw!important;
     height:auto!important;
     min-height:0!important;
-    max-width:680px!important;
-    margin:0 auto!important;
+    max-width:1100px!important;
+    margin:0!important;
     filter:drop-shadow(0 16px 24px #0007)
   }
 
@@ -98,7 +99,7 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
 
   #book .gutter,#characters .gutter{
     display:block!important;
-    left:38%!important;
+    left:50%!important;
     top:8px!important;
     bottom:8px!important;
     width:10px!important;
@@ -112,10 +113,10 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
     min-height:calc(min(72vh,700px))!important;
     padding:20px 18px 22px!important
   }
-  #book .booktitle{font-size:clamp(28px,7.2vw,40px)!important}
+  #book .booktitle{font-size:clamp(32px,8vw,46px)!important}
   #book .intro{font-size:13px!important;line-height:1.42}
   #book .toc-row{padding:11px 0!important;min-height:42px}
-  #book .toc-row b{font-size:16px!important}
+  #book .toc-row b{font-size:17px!important}
   #book .toc-row span,#book .toc-row em{font-size:10px}
 
   /* Category index: same open-book geometry, content occupies the right leaf cleanly */
@@ -162,16 +163,22 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
 
   /* Old two-image character spreads: never show a hard black canyon between leaves */
   #entry .generatedSpread{
-    background:linear-gradient(90deg,#1b120d 0,#2a1b12 48%,#2a1b12 52%,#1b120d 100%)!important
+    background:linear-gradient(90deg,#1b120d,#2a1b12 18%,#2a1b12 82%,#1b120d)!important
+  }
+  #entry .generatedSpread:not(.singleImage){
+    display:flex!important;
+    align-items:stretch!important;
+    justify-content:center!important;
+    gap:0!important
   }
   #entry .generatedSpread:not(.singleImage) img{
-    background:#21160f!important
-  }
-  #entry .generatedSpread:not(.singleImage) img:first-child{
-    object-position:right center!important
-  }
-  #entry .generatedSpread:not(.singleImage) img:last-child{
-    object-position:left center!important
+    flex:0 0 auto!important;
+    width:auto!important;
+    height:var(--book-h)!important;
+    max-height:var(--book-h)!important;
+    object-fit:contain!important;
+    background:transparent!important;
+    border-radius:0!important
   }
   #entry .generatedWrap:not(.singleImage) .generatedGutter{
     display:none!important
@@ -278,7 +285,8 @@ const BOOK1_ASSETS={
 let currentBook=1,currentCategory="Main cast",currentName="Carl",entryOrigin="book";
 const views=[...document.querySelectorAll(".view")];
 
-function go(id){views.forEach(v=>v.classList.toggle("active",v.id===id));requestAnimationFrame(fitCanonicalBooks);const navId=["book","characters","entry","master"].includes(id)?"book":id;document.querySelectorAll(".mobileNav button").forEach(b=>{const active=b.dataset.go===navId;b.classList.toggle("active",active);if(active)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});window.scrollTo(0,0);if(id==="search")renderCatalog("All")}
+function focusMobileOpenBook(id){if(!window.matchMedia("(max-width:950px)").matches)return;const stage=document.querySelector("#"+id+" .stage");if(!stage)return;requestAnimationFrame(()=>{stage.scrollLeft=Math.max(0,stage.scrollWidth-stage.clientWidth)})}
+function go(id){views.forEach(v=>v.classList.toggle("active",v.id===id));requestAnimationFrame(()=>{fitCanonicalBooks();if(id==="book"||id==="characters")focusMobileOpenBook(id)});const navId=["book","characters","entry","master"].includes(id)?"book":id;document.querySelectorAll(".mobileNav button").forEach(b=>{const active=b.dataset.go===navId;b.classList.toggle("active",active);if(active)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});window.scrollTo(0,0);if(id==="search")renderCatalog("All")}
 function openBook(n){currentBook=Number(n);const b=BOOKS[currentBook];document.getElementById("volumeKicker").textContent="VOLUME "+b.roman+" · VISUAL ARCHIVE COPY";document.getElementById("bookKicker").textContent="BOOK "+b.roman+" · ARCHIVE CONTENTS";document.getElementById("bookTitle").textContent=b.title;document.getElementById("bookCover").src=b.cover;go("book")}
 function renderCategory(name){currentCategory=name;const arr=dataForBook()[name]||[],meta=META[name];const make=(items,offset)=>'<div class="indexlist">'+items.map((n,i)=>'<button class="indexrow" data-book-person="'+n.replaceAll('"','&quot;')+'" data-person-category="'+name+'"><span class="indexnum">'+String(offset+i+1).padStart(2,"0")+'</span><span class="indexname">'+n+'</span><span class="indexmeta">Book '+BOOKS[currentBook].roman+' reference</span></button>').join("")+'</div>';const folio=document.getElementById("categoryFolio");folio.classList.remove("singleCategory");if(arr.length<=8){folio.innerHTML='<section class="leaf left categoryBlank" aria-hidden="true"></section><section class="leaf right"><div class="catpage"><div class="kicker">SECTION '+meta[0]+' · BOOK '+BOOKS[currentBook].roman+' ARCHIVE</div><h1>'+name+'</h1><div class="redrule"></div><p>'+meta[1]+'</p>'+make(arr,0)+'</div></section><div class="gutter"></div>'}else{const cut=Math.ceil(arr.length/2);folio.innerHTML='<section class="leaf left categoryLongLeft"><div class="catpage"><div class="kicker">SECTION '+meta[0]+' · BOOK '+BOOKS[currentBook].roman+' ARCHIVE</div><h1>'+name+'</h1><div class="redrule"></div><p>'+meta[1]+'</p>'+make(arr.slice(0,cut),0)+'</div></section><section class="leaf right"><div class="catpage"><div class="kicker">SECTION '+meta[0]+' · CONTINUED</div>'+make(arr.slice(cut),cut)+'</div></section><div class="gutter"></div>'}go("characters")}
 function openBookPerson(name,cat){currentName=name;currentCategory=cat;entryOrigin="book";openEntry(BOOKS[currentBook].roman)}
