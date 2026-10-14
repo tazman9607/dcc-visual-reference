@@ -240,7 +240,125 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
   #entry .characterEdgeNav .edgePrev .navName:before{content:"‹ ";color:#a33f35}
   #entry .characterEdgeNav .edgeNext .navName:after{content:" ›";color:#a33f35}
   #entry .characterEdgeNav button:disabled{visibility:hidden!important}
-}</style>
+}
+@media(max-width:950px){
+  /* One coherent mobile reader chrome layer, independent of book zoom/pan */
+  .back{
+    position:fixed!important;
+    left:12px!important;
+    top:calc(58px + 8px)!important;
+    z-index:87!important;
+    min-height:32px!important;
+    padding:6px 11px!important;
+    border:1px solid #5a4231!important;
+    border-left:3px solid #8e342d!important;
+    border-radius:4px!important;
+    clip-path:none!important;
+    background:linear-gradient(180deg,#281b13,#17100c)!important;
+    color:#e6d2b1!important;
+    box-shadow:0 4px 10px #0006!important;
+    font:700 9px/1 Georgia,serif!important;
+    letter-spacing:.05em!important;
+    text-transform:uppercase!important
+  }
+
+  #entry .stage{
+    padding-bottom:calc(54px + 72px + env(safe-area-inset-bottom))!important
+  }
+
+  #entry .characterEdgeNav{
+    position:fixed!important;
+    left:0!important;
+    right:0!important;
+    bottom:calc(72px + env(safe-area-inset-bottom))!important;
+    z-index:89!important;
+    width:100%!important;
+    height:54px!important;
+    margin:0!important;
+    padding:5px 10px!important;
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:0!important;
+    align-items:stretch!important;
+    border-top:1px solid #644a36!important;
+    border-bottom:1px solid #2b2018!important;
+    background:
+      linear-gradient(180deg,#21160ff8 0%,#120d09fb 100%)!important;
+    box-shadow:0 -8px 20px #0008!important;
+    pointer-events:auto!important;
+    overflow:hidden!important
+  }
+
+  #entry .characterEdgeNav button{
+    position:static!important;
+    transform:none!important;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    min-height:44px!important;
+    padding:6px 11px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    color:#ead7b7!important;
+    box-shadow:none!important;
+    clip-path:none!important;
+    writing-mode:horizontal-tb!important;
+    text-orientation:mixed!important;
+    font-family:Georgia,serif!important
+  }
+
+  #entry .characterEdgeNav .edgePrev{
+    text-align:left!important;
+    margin:0!important;
+    border-right:1px solid #4a3628!important
+  }
+
+  #entry .characterEdgeNav .edgeNext{
+    text-align:right!important;
+    margin:0!important
+  }
+
+  #entry .characterEdgeNav .navDir{
+    display:block!important;
+    margin:0 0 2px!important;
+    font:700 6px/1 Arial,sans-serif!important;
+    letter-spacing:.15em!important;
+    text-transform:uppercase!important;
+    color:#957e63!important
+  }
+
+  #entry .characterEdgeNav .navName{
+    display:block!important;
+    font:700 14px/1.05 Georgia,serif!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important
+  }
+
+  #entry .characterEdgeNav .edgePrev .navName:before{
+    content:"‹ "!important;
+    color:#aa493e!important
+  }
+
+  #entry .characterEdgeNav .edgeNext .navName:after{
+    content:" ›"!important;
+    color:#aa493e!important
+  }
+
+  #entry .characterEdgeNav button:disabled{
+    visibility:visible!important;
+    opacity:.22!important;
+    pointer-events:none!important
+  }
+
+  /* Disabled edge still occupies its half so the pane always reads as one control surface */
+  #entry .characterEdgeNav button:disabled .navName:after,
+  #entry .characterEdgeNav button:disabled .navName:before{
+    content:""!important
+  }
+}
+</style>
 </head>
 <body>
 <div class="app">
