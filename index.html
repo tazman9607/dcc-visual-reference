@@ -62,7 +62,7 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
 
   #book .folio,#characters .folio{
     display:grid!important;
-    grid-template-columns:27% 73%!important;
+    grid-template-columns:38% 62%!important;
     position:relative!important;
     left:auto!important;
     transform:none!important;
@@ -98,7 +98,7 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
 
   #book .gutter,#characters .gutter{
     display:block!important;
-    left:27%!important;
+    left:38%!important;
     top:8px!important;
     bottom:8px!important;
     width:10px!important;
@@ -112,10 +112,10 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
     min-height:calc(min(72vh,700px))!important;
     padding:20px 18px 22px!important
   }
-  #book .booktitle{font-size:clamp(30px,8vw,44px)!important}
+  #book .booktitle{font-size:clamp(28px,7.2vw,40px)!important}
   #book .intro{font-size:13px!important;line-height:1.42}
   #book .toc-row{padding:11px 0!important;min-height:42px}
-  #book .toc-row b{font-size:17px!important}
+  #book .toc-row b{font-size:16px!important}
   #book .toc-row span,#book .toc-row em{font-size:10px}
 
   /* Category index: same open-book geometry, content occupies the right leaf cleanly */
@@ -167,12 +167,14 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
   #entry .generatedSpread:not(.singleImage) img{
     background:#21160f!important
   }
+  #entry .generatedSpread:not(.singleImage) img:first-child{
+    object-position:right center!important
+  }
+  #entry .generatedSpread:not(.singleImage) img:last-child{
+    object-position:left center!important
+  }
   #entry .generatedWrap:not(.singleImage) .generatedGutter{
-    display:block!important;
-    width:8px!important;
-    top:0!important;
-    bottom:0!important;
-    background:linear-gradient(90deg,transparent,#0002,#fff1,transparent)!important
+    display:none!important
   }
   #entry .generatedWrap.singleImage .generatedGutter{display:none!important}
 }
@@ -335,8 +337,8 @@ function fitCanonicalBooks(){
       zoomScale=minZoom;
       zoomY=0;
     }
-    const renderedW=1180*fit*zoomScale;
-    zoomX=(vp.clientWidth-renderedW)/2;
+    zoomX=Math.min(0,zoomX);
+    zoomY=Math.min(0,zoomY);
     applyZoom();
   }else if(vp&&wrap){
     vp.style.width="";
@@ -351,7 +353,7 @@ function updateCharacterNav(){const arr=categoryNames(),i=arr.indexOf(currentNam
 function moveCharacter(dir){const arr=categoryNames(),i=arr.indexOf(currentName),n=i+dir;if(n<0||n>=arr.length)return;currentName=arr[n];openEntry(BOOKS[currentBook].roman)}
 function clampPan(){const vp=document.getElementById("zoomViewport"),el=document.getElementById("generatedEntry");if(!vp||!el)return;const fit=Number(el.dataset.fitScale||1),vw=vp.clientWidth,vh=vp.clientHeight,ew=el.offsetWidth*fit*zoomScale,eh=el.offsetHeight*fit*zoomScale;const minX=Math.min(0,vw-ew),minY=Math.min(0,vh-eh);zoomX=Math.max(minX,Math.min(0,zoomX));zoomY=Math.max(minY,Math.min(0,zoomY))}
 function applyZoom(){clampPan();const el=document.getElementById("generatedEntry");if(!el)return;const fit=Number(el.dataset.fitScale||1);el.style.transform="translate3d("+zoomX+"px,"+zoomY+"px,0) scale("+(fit*zoomScale)+")";el.style.transformOrigin="top left"}
-function resetZoom(){zoomScale=mobileEntryDefaultZoom();zoomX=0;zoomY=0;const vp=document.getElementById("zoomViewport"),el=document.getElementById("generatedEntry"),fit=Number(el?.dataset.fitScale||1);if(vp&&el&&zoomScale>1.01){const vw=vp.clientWidth,ew=el.offsetWidth*fit*zoomScale;zoomX=(vw-ew)/2}applyZoom()}
+function resetZoom(){zoomScale=mobileEntryDefaultZoom();zoomX=0;zoomY=0;applyZoom()}
 function toggleZoom(clientX,clientY){const base=mobileEntryDefaultZoom();if(zoomScale>base+0.15){resetZoom();return}const vp=document.getElementById("zoomViewport"),r=vp.getBoundingClientRect();const fit=Number(document.getElementById("generatedEntry")?.dataset.fitScale||1),localX=clientX-r.left,localY=clientY-r.top;zoomScale=Math.min(2.2,base*1.55);zoomX=localX-(localX/(fit*base))*fit*zoomScale;zoomY=localY-(localY/(fit*base))*fit*zoomScale;applyZoom();requestAnimationFrame(fitCanonicalBooks)}
 function distance(a,b){return Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)}
 function midpoint(a,b){return{x:(a.clientX+b.clientX)/2,y:(a.clientY+b.clientY)/2}}
