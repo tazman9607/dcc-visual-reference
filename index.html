@@ -442,14 +442,24 @@ main{max-width:1450px;margin:auto;padding:18px 16px 80px}
 
 <script>
 const DATA={"Main cast":["Carl","Princess Donut","Mordecai","Mongo","Katia Grim"],"Allies":["Imani","Elle McGibbons","Prepotente","Miriam Dom","Li Jun","Li Na","Florin","Bianca","Brandon Andrews","Chris Andrews","Agatha"],"NPCs":["Zev","Odette","System AI","Chaco","Loita"],"Enemies":["Prince Maestro","Frank Q","Maggie My","Tsarina Signet"],"Monsters":["Goblin Engineers","Lava Llamas","Troglodytes","Clurichauns","Laminaks","Mind Horrors","Krakaren Hatchlings","Station Mimics"],"Bosses":["The Hoarder","The Juicer","Ball of Swine","Krakaren","Rage Elemental","Heather the Bear","Ringmaster Grimaldi","Remex the Grand","Gore-Gore the ManTauR","Dismember the War Mage","Mimic Rex","Grull"]};
-const BOOK_DATA={1:{
+const BOOK_DATA={
+1:{
   "Main cast":["Carl","Princess Donut","Mordecai","Mongo"],
   "Allies":["Imani","Brandon & Chris Andrews","Agatha","Miriam Dom","Death Watch Crawlers"],
   "NPCs":["Zev","Odette","System AI"],
   "Enemies":["Prince Maestro","Frank Q & Maggie My"],
   "Monsters":["Goblin Engineers","Bad Llamas","Laminaks","Floor 2 Creatures"],
   "Bosses":["The Hoarder","The Juicer","Ball of Swine","Krakaren","Rage Elemental"]
-}};
+},
+2:{
+  "Main cast":["Carl","Princess Donut","Mordecai","Mongo","Katia Grim"],
+  "Allies":["Hekla","Lucia Mar"],
+  "NPCs":["Zev","Odette","Tsarina Signet","Miss Quill","Quint","Pustule"],
+  "Enemies":["Remex"],
+  "Monsters":["Krasue","Circus Monsters"],
+  "Bosses":["Heather the Bear","Ringmaster Grimaldi"]
+}
+};
 function dataForBook(){return BOOK_DATA[currentBook]||DATA}
 const META={"Main cast":["01","The core party and central figures of this volume."],"Allies":["02","Friendly crawlers, companions and recurring support figures."],"NPCs":["03","Dungeon staff, media personalities and non-crawler figures."],"Enemies":["04","Named hostile and antagonistic recurring characters."],"Monsters":["05","Species, mobs and non-boss creatures encountered in the dungeon."],"Bosses":["06","Major named encounters and boss-level threats."]};
 const BOOKS={
@@ -481,6 +491,15 @@ const BOOK1_ASSETS={
   "Krakaren":["./assets/krakaren-clone.webp"],
   "Rage Elemental":["./assets/rage-elemental.webp"]
 };
+const BOOK2_ASSETS={
+  "Carl":["./assets/carl-book1-left.webp","./assets/carl-book1-right.webp"],
+  "Princess Donut":["./assets/princess-donut-p1.webp","./assets/princess-donut-p2.webp"],
+  "Mongo":["./assets/mongo-p1.webp","./assets/mongo-p2.webp"],
+  "Zev":["./assets/book1-zev.webp"],
+  "Odette":["./assets/odette-p1.webp","./assets/odette-p2.webp"]
+};
+const BOOK_ASSETS={1:BOOK1_ASSETS,2:BOOK2_ASSETS};
+
 let currentBook=1,currentCategory="Main cast",currentName="Carl",entryOrigin="book";
 const views=[...document.querySelectorAll(".view")];
 
@@ -491,7 +510,7 @@ function renderCategory(name){currentCategory=name;const arr=dataForBook()[name]
 function openBookPerson(name,cat){currentName=name;currentCategory=cat;entryOrigin="book";openEntry(BOOKS[currentBook].roman)}
 function openMaster(name,cat){currentName=name;currentCategory=cat;document.getElementById("masterName").textContent=name;document.getElementById("masterCategory").textContent=cat;go("master")}
 function openEntry(roman){
-  const assets=roman==="I"?BOOK1_ASSETS[currentName]:null;
+  const assets=BOOK_ASSETS[currentBook]?.[currentName]||null;
   const real=Array.isArray(assets)&&assets.length>0;
   const wrap=document.getElementById("generatedEntry");
   const spread=wrap.querySelector(".generatedSpread");
@@ -506,7 +525,11 @@ function openEntry(roman){
   }else{
     wrap.classList.remove("singleImage");
     spread.classList.remove("singleImage");
-    ph.innerHTML='<div class="kicker">BOOK '+roman+' · CHARACTER STUDY</div><h1 style="font:700 52px Georgia,serif;margin:12px 0">'+currentName+' — Book '+roman+'</h1><p>This book-specific visual spread has not been generated yet.</p>';
+    if(currentBook===2&&currentName==="Mordecai"){
+      ph.innerHTML='<div class="kicker">MORDECAI · FORMS ARCHIVE</div><h1 style="font:700 52px Georgia,serif;margin:12px 0">Mordecai — Book II</h1><p>Incubus form · visual-first archive panel pending artwork.</p>';
+    }else{
+      ph.innerHTML='<div class="kicker">BOOK '+roman+' · CHARACTER STUDY</div><h1 style="font:700 52px Georgia,serif;margin:12px 0">'+currentName+' — Book '+roman+'</h1><p>This book-specific visual spread has not been generated yet.</p>';
+    }
   }
   resetZoom();
   updateCharacterNav();
